@@ -56,6 +56,14 @@
   .btn:active{ transform:translateY(4px); box-shadow:0 1px 0 var(--maroon); }
   .btn.ghost{ background:var(--cream); color:var(--maroon); }
   .btn.done{ background:var(--teal); }
+  .contact{ display:flex; flex-direction:column; align-items:center; gap:10px; text-align:center; padding:22px 20px; margin:26px 0 0; }
+  .contact-t,.contact-d{ margin:0; }
+  .contact-t{ font-family:'Noto Serif TC',serif; font-weight:900; font-size:19px; color:var(--maroon); }
+  .contact-d{ font-size:13.5px; color:var(--ink); opacity:.8; line-height:1.7; }
+  .contact .btn{ width:auto; min-width:220px; text-decoration:none; }
+  .item-contact{ margin-top:14px; text-align:center; font-size:13.5px; line-height:1.7; }
+  .item-contact a{ color:var(--rust); font-weight:900; text-decoration:underline; text-underline-offset:3px; }
+
 
   /* ---------- top bar ---------- */
   .jointbar{
@@ -129,8 +137,10 @@
 
   /* ---------- home ---------- */
   .hero-banner{ border:3px solid var(--maroon); border-radius:24px; overflow:hidden; box-shadow:0 6px 0 var(--maroon); background:var(--maroon); }
-  .hero-banner .scene{ display:block; width:100%; aspect-ratio:2/1; height:auto; }
-  @media (min-width:640px){ .hero-banner .scene{ aspect-ratio:1200/380; } }
+  .hero-banner .scene{ display:block; width:100%; height:auto; }
+  .hero-banner .scene-m{ aspect-ratio:16/10; }
+  .hero-banner .scene-w{ display:none; aspect-ratio:1200/380; }
+  @media (min-width:640px){ .hero-banner .scene-m{ display:none; } .hero-banner .scene-w{ display:block; } }
   .hero{ text-align:center; margin:30px 0 26px; }
   .hero-eyebrow{ display:inline-block; font-size:12.5px; color:var(--cream); background:var(--rust); letter-spacing:3px; margin:0 0 12px; padding:5px 16px; border-radius:999px; font-weight:900; }
   .hero-title{ font-size:32px; font-weight:900; color:var(--maroon); margin:0 0 8px; line-height:1.3; letter-spacing:1px; }
@@ -359,17 +369,17 @@
       <div class="pf-body">
         <div class="pf-inner">
           <div class="pf-logo-wrap">
-            <img class="pf-logo" id="pfLogo" src="" alt="想樂創意整合 wedding fun">
+            <img class="pf-logo" id="pfLogo" src="" alt="想樂創意 wedding fun">
             <span class="pf-logo-x">×</span>
             <div class="pf-event-badge"><img id="wdLogo" src="" alt="WeddingDay 好婚市集"></div>
           </div>
-          <p class="pf-eyebrow">想樂創意整合 × 好婚市集　聯合出品</p>
+          <p class="pf-eyebrow">想樂創意 × 好婚市集　聯合出品</p>
           <h1 class="pf-title">在你們開始之前，<br>我想先說幾句話。</h1>
 
           <div class="pf-letter dcard">
             <p class="pf-letter-text">這本手冊裡的每一句話，都不是查來的攻略，是想樂創意的主理人 Erin，帶著二十年陪新人籌備婚禮的經驗，一則一則寫下來的真實判斷。哪裡會卡住、該怎麼決定、要付出什麼代價——我們是真的遇過，才敢這樣跟你們說。</p>
             <p class="pf-letter-text">這一版跟著好婚市集「愛情加油中」主題走，把最容易卡住的地方，畫成四個路段。你們可以照順序看，也可以直接跳到現在最頭痛的那一段。</p>
-            <p class="pf-letter-sign">— 想樂創意整合　主理人 Erin</p>
+            <p class="pf-letter-sign">— 想樂創意　主理人 Erin</p>
           </div>
 
           <div class="pf-howto">
@@ -381,7 +391,7 @@
           </div>
 
           <button class="btn" id="pfCtaBtn">開始翻手冊 →</button>
-          <p class="pf-footer">想樂創意整合 × 好婚市集　聯合出品<br>2026.11.14–15　華山文創園區 東二館</p>
+          <p class="pf-footer">想樂創意 × 好婚市集　聯合出品<br>2026.11.14–15　華山文創園區 東二館</p>
         </div>
       </div>
     </div>
@@ -405,7 +415,20 @@
 
   <!-- HOME -->
   <div class="view hidden" id="view-home">
-    <div class="hero-banner"><svg class="scene" viewBox="0 0 1200 380" preserveAspectRatio="xMidYMid slice" role="img" aria-label="愛情加油中 加油站場景">
+    <div class="hero-banner"><svg class="scene scene-m" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid slice" role="img" aria-label="愛情加油中 加油站場景">
+ <rect width="800" height="600" fill="#FDECCB"/>
+ <circle cx="640" cy="150" r="70" fill="#F7DDC0"/>
+ <path d="M560 470 L590.6 340 L699.4 340 L730 470Z" fill="#EBAF7E"/><path d="M40 470 L67.0 370 L163.0 370 L190 470Z" fill="#E7A27C"/>
+ <rect y="520" width="800" height="80" fill="url(#chk)"/>
+ <rect y="468" width="800" height="52" fill="#831F20"/>
+ <line x1="0" y1="494" x2="800" y2="494" stroke="#FDECCB" stroke-width="5" stroke-dasharray="44 30"/>
+ <rect x="384" y="330" width="32" height="140" fill="#F0A12A" stroke="#831F20" stroke-width="3"/>
+ <use href="#sign" transform="translate(180,60)"/>
+ <use href="#star" transform="translate(205,62) scale(1.05)"/>
+ <g transform="rotate(-8 100 190)"><use href="#fuelTag" transform="translate(22,176) scale(.8)"/></g>
+ <use href="#pump" transform="translate(60,312)"/>
+ <use href="#car" transform="translate(520,412)"/>
+</svg><svg class="scene scene-w" viewBox="0 0 1200 380" preserveAspectRatio="xMidYMid slice" role="img" aria-label="愛情加油中 加油站場景">
  <rect width="1200" height="380" fill="#FDECCB"/>
  <circle cx="1010" cy="110" r="64" fill="#F7DDC0"/>
  <path d="M900 300 L934.2 190 L1055.8 190 L1090 300Z" fill="#EBAF7E"/><path d="M60 300 L90.6 210 L199.4 210 L230 300Z" fill="#E7A27C"/><path d="M250 300 L271.6 240 L348.4 240 L370 300Z" fill="#EBAF7E"/>
@@ -427,6 +450,11 @@
       <button class="hero-credit" id="heroCreditBtn">想樂創意 主理人 Erin・20 年婚顧經驗 真實回覆</button>
     </div>
     <div class="cat-list" id="catList"></div>
+    <div class="contact dcard">
+      <p class="contact-t">還是卡住了？直接問想樂創意</p>
+      <p class="contact-d">每對新人的狀況都不一樣，<br>想一對一聊聊，歡迎跟我們聯繫。</p>
+      <a class="btn" href="https://www.weddingfunstudio.com/" target="_blank" rel="noopener">聯繫想樂創意 →</a>
+    </div>
     <div class="fuel-panel">
       <span class="fuel-panel-label">幸福油量表</span>
       <span class="fuel-panel-num" id="panelFuelNum">0/9</span>
@@ -477,6 +505,7 @@
           </div>
         </div>
         <button class="btn" id="markReadBtn">加滿這一格油</button>
+        <p class="item-contact">這題跟你們的狀況很像？<br><a href="https://www.weddingfunstudio.com/" target="_blank" rel="noopener">聯繫想樂創意，跟 Erin 聊聊 →</a></p>
       </div>
     </div>
   </div>
@@ -714,14 +743,14 @@
    },
    {
     "id": "m4-2",
-    "title": "婚禮是不是人越多越熱鬧？",
+    "title": "婚禮要辦幾桌？人越多越好嗎？",
     "unlocked": true,
-    "scene": "婚禮是不是人越多越熱鬧？",
+    "scene": "婚禮要辦幾桌？人越多越好嗎？",
     "advice": "婚禮真的不是人越多就越好。疫情過後，我們已經從大桌數的婚禮，慢慢減少到精緻型的婚禮。\n\n我自己的體感是：疫情過後，大家發現生命是非常無價的，也讓我們知道真正的核心人物是誰，所以現在很流行比較小型的婚禮。\n\n在人生重要的時刻，我們把真正的焦點跟精力，放給真正重要的好朋友，好好經營，讓我們的感情細水長流。",
     "quote": "婚禮不是\n人越多就越好。",
     "diagram": {
      "type": "compare",
-     "label": "圖解｜人多 vs 精緻",
+     "label": "圖解｜大桌數 vs 精緻型",
      "left": {
       "t": "大桌數",
       "d": "人多\n焦點被分散",
