@@ -1,472 +1,277 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
-<meta charset="UTF-8">
 <meta name="robots" content="noindex,nofollow">
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#831F20">
+<meta name="theme-color" content="#FBF4EA">
 <title>公路救援手冊</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Noto+Serif+TC:wght@500;700;900&family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@500;700;900&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
   :root{
-    --cream:#FDECCB;
-    --paper:#FFF7E8;
-    --card:#FFF9EE;
-    --maroon:#831F20;
-    --maroon2:#5E1416;
-    --rust:#C14F32;
-    --orange:#F0A12A;
-    --teal:#3E8C8B;
-    --sage:#8B9572;
-    --pink:#F3C3B8;
-    --sand:#F7DDC0;
-    --line:#E6C99B;
-    --ink:#3A1E1A;
-    --muted:#8A6A55;
-    --font-serif:'Noto Serif TC', "PingFang TC", "Microsoft JhengHei", serif;
-    --font-sans:'Noto Sans TC', "PingFang TC", "Microsoft JhengHei", sans-serif;
-    --font-display:'Abril Fatface', 'Noto Serif TC', serif;
+    --paper:#FBF4EA; --paper2:#F5E9D8; --card:#FFFDF9; --blush:#F7E0D4; --mist:#E3EEF5;
+    --ink:#3A2A26; --soft:#6B574F; --muted:#9A8579; --line:#E9DAC8;
+    --rust:#9D380E; --blue:#4F8AAE; --honey:#E9B766; --green:#06A94D;
+    --serif:'Noto Serif TC',"PingFang TC","Microsoft JhengHei",serif;
+    --sans:'Noto Sans TC',"PingFang TC","Microsoft JhengHei",sans-serif;
   }
   *{box-sizing:border-box;}
   html,body{margin:0;padding:0;}
-  body{ overflow-x:hidden; background:var(--cream); font-family:var(--font-sans); color:var(--ink); min-height:100vh; -webkit-text-size-adjust:100%; }
-  button{ font-family:inherit; }
-  #app{ min-height:100vh; position:relative; }
+  body{
+    overflow-x:hidden; min-height:100vh; color:var(--ink); font-family:var(--sans); line-height:1.7; -webkit-text-size-adjust:100%;
+    background:
+      radial-gradient(60% 40% at 92% -6%, #F8D9C8 0, rgba(248,217,200,0) 70%),
+      radial-gradient(50% 36% at -8% 34%, #E1EDF4 0, rgba(225,237,244,0) 70%),
+      var(--paper);
+    background-attachment:fixed;
+  }
+  button{ font-family:inherit; color:inherit; }
+  #app{ min-height:100vh; }
   .hidden{ display:none !important; }
   canvas{ display:none; }
+  :focus-visible{ outline:3px solid var(--blue); outline-offset:3px; border-radius:6px; }
 
-  /* ---------- motifs ---------- */
-  .checker{ height:18px; background:conic-gradient(var(--sage) 25%, var(--cream) 0 50%, var(--sage) 0 75%, var(--cream) 0) 0 0/18px 18px; }
-  .pill{
-    display:inline-block; border:3px solid var(--maroon); background:var(--cream); color:var(--maroon);
-    border-radius:999px; padding:5px 18px; font-weight:900; font-size:15px; letter-spacing:2px;
-    transform:rotate(-1.5deg); margin:0 0 12px;
-  }
-  .dcard{ position:relative; background:var(--card); border:3px solid var(--rust); border-radius:26px; }
-  .dcard::after{ content:""; position:absolute; inset:7px; border:2px dashed var(--rust); border-radius:19px; opacity:.75; pointer-events:none; }
-  .sign{ border-radius:26px; padding:8px; box-shadow:0 6px 0 rgba(58,30,26,.28); }
-  .sign-in{ border:7px dotted var(--orange); border-radius:19px; padding:20px 20px 18px; }
+  /* ---------- buttons & small parts ---------- */
   .btn{
     display:flex; align-items:center; justify-content:center; gap:8px; width:100%;
-    border:3px solid var(--maroon); background:var(--rust); color:#FFF7E8; border-radius:999px;
-    padding:14px 18px; font-size:16px; font-weight:900; letter-spacing:1.5px; cursor:pointer;
-    box-shadow:0 5px 0 var(--maroon); transition:transform .12s, box-shadow .12s;
+    border:0; background:var(--rust); color:#FFF8EE; border-radius:999px; padding:15px 22px;
+    font-size:16px; font-weight:700; letter-spacing:1px; cursor:pointer; text-decoration:none;
+    box-shadow:0 8px 20px rgba(157,56,14,.2); transition:transform .15s, box-shadow .15s;
   }
-  .btn:active{ transform:translateY(4px); box-shadow:0 1px 0 var(--maroon); }
-  .btn.ghost{ background:var(--cream); color:var(--maroon); }
-  .btn.done{ background:var(--teal); }
-  .contact{ display:flex; flex-direction:column; align-items:center; gap:10px; text-align:center; padding:22px 20px; margin:26px 0 0; }
-  .contact-t,.contact-d{ margin:0; }
-  .contact-t{ font-family:'Noto Serif TC',serif; font-weight:900; font-size:19px; color:var(--maroon); }
-  .contact-d{ font-size:13.5px; color:var(--ink); opacity:.8; line-height:1.7; }
-  .contact .btn{ width:auto; min-width:240px; text-decoration:none; }
-  .btn.line{ background:#06A94D; }
-  .item-contact{ margin-top:14px; text-align:center; font-size:13.5px; line-height:1.7; }
-  .item-contact a{ color:var(--rust); font-weight:900; text-decoration:underline; text-underline-offset:3px; }
+  .btn:hover{ transform:translateY(-1px); }
+  .btn:active{ transform:translateY(1px); box-shadow:0 3px 8px rgba(157,56,14,.2); }
+  .btn.ghost{ background:transparent; color:var(--rust); box-shadow:inset 0 0 0 2px var(--rust); }
+  .btn.done{ background:var(--blue); box-shadow:0 8px 20px rgba(79,138,174,.25); }
+  .btn.line{ background:var(--green); box-shadow:0 8px 20px rgba(6,169,77,.22); }
+  .car{ display:inline-block; width:34px; height:17px; color:var(--rust); }
+  .car svg{ display:block; width:100%; height:100%; }
 
-
-  /* ---------- top bar ---------- */
-  .jointbar{
-    background:var(--paper); border-bottom:2px solid var(--line);
-    padding:7px max(16px, calc((100vw - 1080px)/2));
-    display:flex; align-items:center; justify-content:center; gap:7px; font-size:11.5px;
-  }
-  .jb-mark{ color:var(--rust); font-weight:900; letter-spacing:.5px; }
-  .jb-mark.jb-b{ color:var(--maroon); }
-  .jb-x{ color:#C9A67A; font-size:12px; }
-  .jb-label{ color:var(--muted); margin-left:4px; letter-spacing:1px; }
+  /* ---------- top bars ---------- */
+  .jointbar{ background:var(--paper2); padding:6px 16px; text-align:center; font-size:12px; color:var(--soft); letter-spacing:1px; }
+  .jointbar b{ font-weight:500; color:var(--rust); }
   .topbar{
-    position:sticky; top:0; z-index:30; background:var(--maroon); color:var(--cream);
-    padding:11px max(16px, calc((100vw - 1080px)/2)) 22px;
-    display:flex; align-items:center; gap:12px;
-  }
-  .topbar::after{
-    content:""; position:absolute; left:0; right:0; bottom:5px; height:10px;
-    background:radial-gradient(circle at 50% 50%, var(--orange) 3px, transparent 3.6px) 0 0/16px 10px repeat-x;
+    position:sticky; top:0; z-index:30; background:rgba(251,244,234,.92); -webkit-backdrop-filter:blur(8px); backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--line);
+    padding:10px max(16px, calc((100vw - 720px)/2 + 20px)); display:flex; align-items:center; gap:12px;
   }
   .backbtn, .infobtn{
-    width:36px; height:36px; border-radius:50%; border:none; color:var(--cream); background:rgba(255,255,255,.15);
-    font-size:20px; display:flex; align-items:center; justify-content:center; cursor:pointer; flex-shrink:0;
-    transition:transform .15s;
+    width:36px; height:36px; border-radius:50%; border:0; flex-shrink:0; cursor:pointer;
+    display:flex; align-items:center; justify-content:center; font-size:22px; line-height:1; background:var(--paper2); color:var(--rust);
   }
-  .backbtn:active, .infobtn:active{ transform:scale(.9); }
-  .infobtn{ background:var(--orange); color:var(--maroon2); font-size:14px; font-weight:900; font-family:var(--font-serif); }
-  .topbar-title{ flex:1; font-size:15px; letter-spacing:2px; color:var(--cream); font-weight:700; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
-  .fuel-wrap{ display:flex; align-items:center; gap:7px; font-size:12px; color:var(--orange); font-weight:700; }
-  .fuel-bar{ width:58px; height:9px; border-radius:6px; background:rgba(0,0,0,.28); overflow:hidden; }
-  .fuel-fill{ height:100%; background:linear-gradient(90deg, var(--orange), #FFD27A); transition:width .5s ease; border-radius:6px; }
+  .infobtn{ background:var(--rust); color:#FFF8EE; font-size:15px; font-weight:700; font-family:var(--serif); }
+  .topbar-title{ flex:1; min-width:0; font-family:var(--serif); font-weight:700; font-size:15px; color:var(--ink); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .fuel-wrap{ display:flex; align-items:center; gap:8px; font-size:12.5px; color:var(--soft); font-weight:500; }
+  .fuel-bar{ width:56px; height:8px; border-radius:6px; background:var(--line); overflow:hidden; }
+  .fuel-fill{ height:100%; background:linear-gradient(90deg, var(--honey), #F3A04A); border-radius:6px; transition:width .6s ease; }
 
+  /* ---------- views ---------- */
+  .view{ max-width:720px; margin:0 auto; padding:30px 20px 80px; animation:fadeIn .35s ease; }
+  @keyframes fadeIn{ from{opacity:0;} to{opacity:1;} }
 
-  /* ---------- interactions ---------- */
+  /* ---------- preface ---------- */
+  .pf-head{ text-align:center; padding:18px 0 6px; }
+  .pf-logos{ display:flex; align-items:center; justify-content:center; gap:14px; margin-bottom:22px; }
+  .pf-logo{ width:72px; height:72px; object-fit:contain; mix-blend-mode:multiply; }
+  .pf-x{ color:var(--muted); font-size:18px; }
+  .pf-badge{ width:56px; height:56px; border-radius:16px; overflow:hidden; background:var(--blush); display:flex; align-items:center; justify-content:center; }
+  .pf-badge img{ width:100%; height:100%; object-fit:cover; }
+  .pf-tag{ display:inline-block; margin:0 0 10px; padding:4px 16px; border-radius:999px; background:var(--blush); color:var(--rust); font-size:14px; font-weight:500; letter-spacing:3px; }
+  .pf-brand{ font-family:var(--serif); font-weight:900; font-size:44px; line-height:1.2; letter-spacing:2px; color:var(--rust); margin:0; }
+  .road{ position:relative; height:26px; margin:22px auto 6px; max-width:420px; }
+  .road::before{ content:""; position:absolute; left:0; right:0; bottom:3px; border-top:2px dashed #D9BE9E; }
+  .road .car{ position:absolute; bottom:3px; left:calc(50% - 17px); }
+  .pf-title{ font-family:var(--serif); font-weight:700; font-size:25px; line-height:1.55; color:var(--ink); margin:30px 0 18px; }
+  .pf-letter{ background:var(--card); border-radius:26px; padding:26px 24px 22px; box-shadow:0 1px 0 var(--line), 0 14px 34px rgba(157,56,14,.07); }
+  .pf-letter p{ font-family:var(--serif); font-size:16.5px; line-height:2.05; margin:0 0 14px; color:var(--ink); }
+  .pf-letter .sign{ text-align:right; font-size:15px; color:var(--rust); font-weight:700; margin:8px 0 0; }
+  .pf-howto{ margin:30px 0 28px; }
+  .pf-howto h3{ font-family:var(--serif); font-size:17px; margin:0 0 12px; color:var(--ink); }
+  .pf-howto ul{ list-style:none; margin:0; padding:0; }
+  .pf-howto li{ position:relative; padding:0 0 0 24px; margin:0 0 10px; font-size:15.5px; line-height:1.8; color:var(--soft); }
+  .pf-howto li::before{ content:""; position:absolute; left:3px; top:.7em; width:9px; height:9px; border-radius:50%; background:var(--honey); }
+  .pf-howto b{ color:var(--ink); font-weight:700; }
+  .pf-footer{ text-align:center; font-size:12.5px; color:var(--muted); margin:18px 0 0; line-height:1.8; }
+
+  /* ---------- home ---------- */
+  .home-head{ padding:6px 0 22px; }
+  .home-title{ font-family:var(--serif); font-weight:900; font-size:32px; line-height:1.4; margin:0 0 8px; color:var(--rust); }
+  .home-sub{ font-size:16px; color:var(--soft); margin:0 0 10px; }
+  .home-meta{ font-size:13px; color:var(--muted); margin:0; }
+  .home-credit{ border:0; background:none; padding:0; margin:10px 0 0; font-size:14px; color:var(--blue); cursor:pointer; text-decoration:underline; text-underline-offset:4px; text-align:left; }
+  .fuel-card{ background:var(--card); border-radius:22px; padding:16px 18px 14px; margin:0 0 28px; box-shadow:0 1px 0 var(--line), 0 10px 26px rgba(157,56,14,.06); }
+  .fuel-top{ display:flex; justify-content:space-between; align-items:baseline; font-size:14px; color:var(--soft); margin-bottom:10px; font-weight:500; }
+  .fuel-top b{ font-family:var(--serif); font-size:18px; color:var(--rust); }
+  .track{ position:relative; padding-top:18px; }
+  .track .fuel-bar{ width:100%; height:10px; }
+  .track-car{ position:absolute; top:0; left:0; transition:left 1.1s cubic-bezier(.3,.7,.3,1); }
+  .fuel-note{ font-size:12.5px; color:var(--muted); margin:10px 0 0; }
+
+  .road-list{ display:flex; flex-direction:column; }
+  .stop{ position:relative; display:flex; gap:16px; width:100%; text-align:left; padding:0 0 28px; background:none; border:0; cursor:pointer; }
+  .stop:not(:last-child)::before{ content:""; position:absolute; left:21px; top:46px; bottom:2px; border-left:2px dashed #DCC3A3; }
+  .stop-dot{ width:44px; height:44px; flex-shrink:0; border-radius:50%; display:flex; align-items:center; justify-content:center; font-family:var(--serif); font-weight:900; font-size:17px; box-shadow:0 0 0 5px var(--paper); position:relative; z-index:1; }
+  .stop-body{ flex:1; min-width:0; padding-top:1px; }
+  .stop-title{ font-family:var(--serif); font-weight:700; font-size:21px; line-height:1.4; color:var(--ink); margin:0 0 2px; }
+  .stop-sub{ font-size:14.5px; color:var(--soft); margin:0; }
+  .stop-progress{ font-size:13.5px; color:var(--blue); margin:6px 0 0; font-weight:500; }
+  .stop-go{ align-self:center; color:var(--muted); font-size:24px; line-height:1; padding-right:2px; }
+  .stop:hover .stop-title{ color:var(--rust); }
+  .stop.closed .stop-dot{ opacity:.4; }
+  .stop.closed .stop-title{ color:var(--muted); }
+  .stop.closed .stop-progress{ color:var(--muted); }
+  .contact{ background:var(--blush); border-radius:26px; padding:26px 22px; margin:8px 0 0; text-align:center; display:flex; flex-direction:column; gap:12px; align-items:center; }
+  .contact-t{ font-family:var(--serif); font-weight:700; font-size:19px; color:var(--rust); margin:0; }
+  .contact-d{ font-size:14.5px; color:var(--soft); line-height:1.8; margin:0; }
+  .contact .btn{ max-width:320px; }
+
+  /* ---------- category ---------- */
+  .cat-header{ margin:0 0 24px; }
+  .cat-mile{ display:inline-block; font-size:13.5px; font-weight:500; color:var(--rust); background:var(--blush); padding:3px 12px; border-radius:999px; margin:0 0 10px; letter-spacing:1px; }
+  .cat-header-title{ font-family:var(--serif); font-weight:900; font-size:32px; line-height:1.35; margin:0 0 6px; color:var(--ink); }
+  .cat-header-sub{ font-size:15.5px; color:var(--soft); margin:0; }
+  .item-list{ display:flex; flex-direction:column; gap:12px; }
+  .item-row{
+    display:flex; align-items:center; gap:14px; width:100%; text-align:left; cursor:pointer;
+    background:var(--card); border:0; border-radius:20px; padding:18px 18px;
+    box-shadow:0 1px 0 var(--line), 0 8px 22px rgba(157,56,14,.05); transition:transform .15s, background .15s;
+  }
+  .item-row:hover{ background:#FFF6EA; transform:translateY(-1px); }
+  .item-row.locked{ background:transparent; box-shadow:inset 0 0 0 1.5px var(--line); cursor:default; }
+  .item-row.locked:hover{ transform:none; background:transparent; }
+  .item-num{ width:32px; height:32px; border-radius:50%; flex-shrink:0; display:flex; align-items:center; justify-content:center; font-family:var(--serif); font-weight:900; font-size:15px; }
+  .item-row-title{ flex:1; font-family:var(--serif); font-weight:700; font-size:18px; line-height:1.55; color:var(--ink); }
+  .item-row.locked .item-row-title{ color:var(--muted); }
+  .item-tag{ font-size:13px; color:var(--blue); flex-shrink:0; font-weight:500; }
+  .item-row.locked .item-tag{ color:var(--muted); }
+
+  /* ---------- item ---------- */
+  .crumb{ display:inline-block; font-size:13.5px; font-weight:500; color:var(--rust); background:var(--blush); padding:3px 12px; border-radius:999px; margin:0 0 14px; letter-spacing:.5px; }
+  .item-main{ display:flex; flex-direction:column; }
+  .scene-text{ font-family:var(--serif); font-weight:900; font-size:27px; line-height:1.5; color:var(--ink); margin:0 0 22px; }
+  .byline{ display:flex; align-items:center; gap:10px; margin:0 0 16px; padding-top:18px; border-top:1px solid var(--line); font-size:13.5px; color:var(--soft); }
+  .byline-badge{ width:30px; height:30px; border-radius:50%; background:var(--rust); color:#FFF8EE; display:flex; align-items:center; justify-content:center; font-family:var(--serif); font-weight:700; font-size:14px; flex-shrink:0; }
+  .advice-text{ font-family:var(--serif); font-size:17.5px; line-height:2.05; color:var(--ink); margin:0 0 6px; max-width:36em; }
+  .advice-text p{ margin:0 0 1.15em; }
+  .item-src{ font-size:12.5px; color:var(--muted); margin:6px 0 26px; }
+  .quote-preview{ cursor:pointer; border-radius:26px; padding:26px 24px 22px; margin:0 0 20px; transition:transform .15s; }
+  .quote-preview:hover{ transform:translateY(-2px); }
+  .quote-preview-text{ font-family:var(--serif); font-weight:900; font-size:25px; line-height:1.6; margin:0; white-space:pre-line; }
+  .quote-preview-cta{ font-size:13.5px; margin:14px 0 0; opacity:.85; }
+  .diagram-label{ font-family:var(--serif); font-weight:700; font-size:15px; color:var(--soft); margin:0 0 10px; }
+  .diagram-box{ background:var(--card); border-radius:22px; padding:18px 18px; box-shadow:0 1px 0 var(--line), 0 8px 22px rgba(157,56,14,.05); margin:0 0 26px; }
+  .pbar-row{ display:flex; align-items:center; gap:10px; margin-bottom:8px; }
+  .pbar{ height:14px; border-radius:7px; flex-shrink:0; }
+  .pbar-label{ font-size:14.5px; color:var(--ink); }
+  .fork-q{ background:var(--rust); color:#FFF8EE; font-size:15px; padding:10px 14px; border-radius:12px; text-align:center; margin-bottom:10px; font-weight:700; }
+  .fork-row{ display:flex; gap:10px; }
+  .fork-opt{ flex:1; font-size:14.5px; padding:16px 10px; border-radius:16px; text-align:center; line-height:1.6; font-weight:500; color:#FFF8EE; }
+  .route-row{ display:flex; gap:4px; margin-bottom:10px; }
+  .route-seg{ height:28px; border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:500; flex:none; }
+  .route-title{ font-size:13px; color:var(--muted); margin:10px 0 4px; }
+  .role-row{ display:flex; align-items:center; gap:12px; margin-bottom:10px; }
+  .role-row:last-of-type{ margin-bottom:0; }
+  .role-dot{ width:26px; height:26px; border-radius:50%; flex-shrink:0; }
+  .role-text{ font-size:15.5px; color:var(--ink); line-height:1.6; }
+  .diag-hint{ font-size:12.5px; color:var(--muted); margin:12px 0 0; text-align:center; }
+  .cmp .fork-opt{ cursor:pointer; transition:transform .2s, opacity .2s; }
+  .cmp.has-sel .fork-opt:not(.sel){ opacity:.4; transform:scale(.97); }
+  .cmp .fork-opt.sel{ transform:scale(1.03); box-shadow:0 8px 18px rgba(58,42,38,.22); }
+  .step-row{ cursor:pointer; padding:7px 6px; border-radius:12px; transition:background .15s; }
+  .step-row:hover{ background:var(--paper2); }
+  .step-row .role-dot{ transition:background .2s, transform .2s; }
+  .step-row.chk .role-text{ text-decoration:line-through; opacity:.5; }
+  .step-row.chk .role-dot{ background:var(--blue) !important; transform:scale(1.08); }
+
   .btn.hold{ position:relative; overflow:hidden; user-select:none; -webkit-user-select:none; -webkit-touch-callout:none; touch-action:manipulation; }
-  .btn.hold::before{ content:""; position:absolute; inset:0; background:var(--orange); transform-origin:left; transform:scaleX(var(--p,0)); }
+  .btn.hold::before{ content:""; position:absolute; inset:0; background:var(--honey); transform-origin:left; transform:scaleX(var(--p,0)); }
   .btn.hold .hold-t{ position:relative; }
   .btn.hold.shake{ animation:shake .4s; }
   @keyframes shake{ 20%{transform:translateX(-6px);} 40%{transform:translateX(6px);} 60%{transform:translateX(-4px);} 80%{transform:translateX(4px);} }
-  .hold-hint{ text-align:center; font-size:12.5px; color:var(--muted); margin-top:-6px; }
+  .hold-hint{ text-align:center; font-size:13px; color:var(--muted); margin:10px 0 0; }
+  .item-contact{ margin:22px 0 0; text-align:center; font-size:14.5px; line-height:1.9; color:var(--soft); }
+  .item-contact a{ color:var(--rust); font-weight:700; text-decoration:underline; text-underline-offset:4px; }
+  .item-nav{ display:flex; gap:12px; margin-top:34px; padding-top:22px; border-top:1px solid var(--line); }
+  .nav-btn{ flex:1; min-width:0; text-align:left; cursor:pointer; background:none; border:0; padding:6px 2px; display:flex; flex-direction:column; gap:4px; }
+  .nav-btn.nx{ text-align:right; align-items:flex-end; }
+  .nav-btn .nv-k{ font-size:13px; font-weight:500; color:var(--blue); }
+  .nav-btn .nv-t{ font-family:var(--serif); font-size:15px; font-weight:700; color:var(--ink); line-height:1.5; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
+  .nav-btn:hover .nv-t{ color:var(--rust); }
+  .nav-btn.pulse .nv-k{ animation:nvpulse 1.2s ease 2; }
+  @keyframes nvpulse{ 50%{ color:var(--rust); transform:translateX(3px); } }
+  .slide-l{ animation:slideL .35s ease; } .slide-r{ animation:slideR .35s ease; }
+  @keyframes slideL{ from{opacity:0; transform:translateX(30px);} to{opacity:1; transform:none;} }
+  @keyframes slideR{ from{opacity:0; transform:translateX(-30px);} to{opacity:1; transform:none;} }
   .spark{ position:fixed; pointer-events:none; z-index:200; font-size:18px; line-height:1; }
-  #toast{ position:fixed; left:50%; bottom:calc(24px + env(safe-area-inset-bottom,0px)); transform:translate(-50%,20px); background:var(--maroon); color:var(--cream); font-weight:900; font-size:14px; padding:11px 20px; border-radius:999px; border:3px solid var(--orange); opacity:0; pointer-events:none; transition:opacity .25s, transform .25s; z-index:210; white-space:nowrap; }
+  #toast{ position:fixed; left:50%; bottom:calc(24px + env(safe-area-inset-bottom,0px)); transform:translate(-50%,20px); background:var(--ink); color:#FFF8EE; font-weight:500; font-size:14px; padding:11px 20px; border-radius:999px; opacity:0; pointer-events:none; transition:opacity .25s, transform .25s; z-index:210; white-space:nowrap; }
   #toast.on{ opacity:1; transform:translate(-50%,0); }
   .pop{ animation:pop .5s; }
-  @keyframes pop{ 40%{ transform:scale(1.5); color:#FFD27A; } }
-  .item-nav{ grid-column:1/-1; display:flex; gap:12px; }
-  .nav-btn{ flex:1; min-width:0; text-align:left; font-family:inherit; cursor:pointer; background:var(--paper); color:var(--maroon); border:3px solid var(--maroon); border-radius:16px; padding:11px 14px; box-shadow:0 4px 0 var(--maroon); display:flex; flex-direction:column; gap:3px; transition:transform .12s, box-shadow .12s; }
-  .nav-btn.nx{ text-align:right; align-items:flex-end; }
-  .nav-btn:active{ transform:translateY(3px); box-shadow:0 1px 0 var(--maroon); }
-  .nav-btn .nv-k{ font-size:12px; font-weight:900; letter-spacing:.08em; color:var(--rust); }
-  .nav-btn .nv-t{ font-size:13.5px; font-weight:700; color:var(--ink); line-height:1.45; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
-  .nav-btn.pulse{ animation:nvpulse 1.2s ease 2; }
-  @keyframes nvpulse{ 50%{ background:#FFE3A8; } }
-  .slide-l{ animation:slideL .35s ease; } .slide-r{ animation:slideR .35s ease; }
-  @keyframes slideL{ from{opacity:0; transform:translateX(36px);} to{opacity:1; transform:none;} }
-  @keyframes slideR{ from{opacity:0; transform:translateX(-36px);} to{opacity:1; transform:none;} }
-  #view-item .content-card > *, #view-item .item-side > *{ animation:fadeIn .5s ease both; }
-  #view-item .content-card > *:nth-child(2){ animation-delay:.05s; } #view-item .content-card > *:nth-child(3){ animation-delay:.1s; }
-  #view-item .content-card > *:nth-child(4){ animation-delay:.15s; } #view-item .content-card > *:nth-child(5){ animation-delay:.2s; }
-  #view-item .item-side > *:nth-child(1){ animation-delay:.12s; } #view-item .item-side > *:nth-child(2){ animation-delay:.2s; }
-  #view-item .item-side > *:nth-child(3){ animation-delay:.28s; } #view-item .item-side > *:nth-child(4){ animation-delay:.34s; }
-  #catList .cat-card{ animation:fadeIn .5s ease both; }
-  #catList .cat-card:nth-child(2){ animation-delay:.07s; } #catList .cat-card:nth-child(3){ animation-delay:.14s; }
-  #catList .cat-card:nth-child(4){ animation-delay:.21s; } #catList .cat-card:nth-child(5){ animation-delay:.28s; }
-  .cmp .fork-opt{ cursor:pointer; transition:transform .2s, opacity .2s, box-shadow .2s; box-shadow:0 3px 0 rgba(58,30,26,.35); }
-  .cmp.has-sel .fork-opt:not(.sel){ opacity:.45; transform:scale(.96); }
-  .cmp .fork-opt.sel{ transform:scale(1.04); box-shadow:0 5px 0 var(--maroon); }
-  .diag-hint{ font-size:12px; color:var(--muted); margin:8px 0 0; text-align:center; }
-  .step-row{ cursor:pointer; padding:6px 4px; border-radius:10px; transition:background .15s; margin-bottom:3px !important; }
-  .step-row:hover{ background:rgba(240,161,42,.18); }
-  .step-row .role-dot{ transition:background .2s, transform .2s; }
-  .step-row.chk .role-text{ text-decoration:line-through; opacity:.55; }
-  .step-row.chk .role-dot{ background:var(--teal) !important; transform:scale(1.1); }
-  .theme-row{ display:flex; gap:12px; justify-content:center; align-items:center; margin:16px 0 4px; }
-  .theme-row span{ font-size:12.5px; color:var(--muted); font-weight:700; }
-  .theme-chip{ width:30px; height:30px; border-radius:50%; border:3px solid var(--maroon); cursor:pointer; padding:0; transition:transform .15s; }
-  .theme-chip.on{ transform:scale(1.25); box-shadow:0 0 0 3px var(--cream), 0 0 0 5px var(--maroon); }
-  @media (prefers-reduced-motion:reduce){ #view-item .content-card > *, #view-item .item-side > *, #catList .cat-card, .slide-l, .slide-r, .pop, .nav-btn.pulse{ animation:none; } }
+  @keyframes pop{ 40%{ transform:scale(1.4); } }
 
-  /* ---------- views ---------- */
-  .view{ padding:22px 16px 54px; max-width:1080px; margin:0 auto; animation:fadeIn .35s ease; }
-  @keyframes fadeIn{ from{opacity:0; transform:translateY(8px);} to{opacity:1; transform:none;} }
-  @media (prefers-reduced-motion:reduce){ .view{ animation:none; } }
+  /* ---------- quote ---------- */
+  .quote-wrap{ max-width:520px; margin:0 auto; }
+  .quote-full{ border-radius:30px; min-height:460px; display:flex; flex-direction:column; justify-content:space-between; padding:34px 28px 26px; }
+  .quote-full-tag{ font-size:14px; font-weight:500; letter-spacing:1px; opacity:.9; }
+  .quote-full-text{ font-family:var(--serif); font-size:34px; font-weight:900; line-height:1.6; margin:26px 0; white-space:pre-line; }
+  .quote-full-footer{ border-top:1px solid currentColor; padding-top:14px; font-size:13px; line-height:1.8; opacity:.9; }
+  .theme-row{ display:flex; gap:12px; justify-content:center; align-items:center; margin:18px 0 4px; }
+  .theme-row span{ font-size:13px; color:var(--muted); }
+  .theme-chip{ width:30px; height:30px; border-radius:50%; border:0; cursor:pointer; padding:0; transition:transform .15s; }
+  .theme-chip.on{ transform:scale(1.2); box-shadow:0 0 0 3px var(--paper), 0 0 0 5px var(--ink); }
+  .quote-actions{ display:flex; gap:12px; margin-top:24px; }
+  .quote-actions .btn{ font-size:15px; padding:14px 10px; }
+  .save-hint{ text-align:center; font-size:12.5px; color:var(--muted); margin-top:14px; }
 
-  /* ---------- preface ---------- */
-  #view-preface{ max-width:none; padding:0; min-height:100vh; display:flex; flex-direction:column; }
-  .pf-grid{ flex:1; display:block; }
-  .pf-banner{ display:none; }
-  .pf-visual{ position:relative; background:var(--cream); }
-  .pf-visual .scene{ display:block; width:100%; aspect-ratio:4/3; height:auto; }
-  .pf-visual .scene-tall{ display:none; }
-  .pf-body{
-    position:relative; margin-top:-26px; background:var(--cream); border-radius:28px 28px 0 0;
-    padding:26px 20px 38px;
-  }
-  .pf-inner{ max-width:560px; margin:0 auto; }
-  .pf-logo-wrap{ display:flex; align-items:center; justify-content:center; gap:14px; margin-bottom:16px; }
-  .pf-logo{ width:76px; height:76px; object-fit:contain; mix-blend-mode:multiply; }
-  .pf-logo-x{ font-size:20px; color:#C9A67A; font-weight:700; }
-  .pf-event-badge{ width:62px; height:62px; border-radius:16px; background:var(--pink); display:flex; align-items:center; justify-content:center; overflow:hidden; border:2px solid var(--maroon); }
-  .pf-event-badge img{ width:100%; height:100%; object-fit:cover; }
-  .pf-eyebrow{ text-align:center; font-size:12.5px; letter-spacing:2px; color:var(--rust); font-weight:900; margin:0 0 14px; }
-  .pf-title{ font-family:var(--font-serif); font-size:29px; font-weight:900; line-height:1.5; text-align:center; color:var(--maroon); margin:0 0 24px; }
-  .pf-letter{ padding:24px 22px; margin-bottom:26px; }
-  .pf-letter-text{ font-size:15.5px; line-height:1.95; color:var(--ink); margin:0 0 14px; position:relative; z-index:1; }
-  .pf-letter-sign{ font-size:14px; color:var(--rust); font-weight:900; margin:0; text-align:right; position:relative; z-index:1; }
-  .pf-howto{ margin-bottom:28px; }
-  .pf-howto-title{ font-size:13px; letter-spacing:3px; color:var(--maroon); font-weight:900; margin:0 0 16px; display:flex; align-items:center; gap:10px; }
-  .pf-howto-title::after{ content:""; flex:1; height:0; border-top:2px dashed var(--rust); opacity:.6; }
-  .pf-step{ display:flex; gap:14px; align-items:flex-start; margin-bottom:15px; }
-  .pf-step:last-child{ margin-bottom:0; }
-  .pf-step-num{
-    width:32px; height:32px; border-radius:50%; flex-shrink:0; border:2.5px solid var(--maroon);
-    display:flex; align-items:center; justify-content:center; font-family:var(--font-display); font-size:15px; color:#FFF7E8;
-  }
-  .pf-step-text{ font-size:15px; line-height:1.7; color:var(--ink); padding-top:4px; margin:0; }
-  .pf-step-text b{ color:var(--maroon); font-weight:900; }
-  .pf-footer{ text-align:center; font-size:11.5px; color:var(--muted); margin:18px 0 0; line-height:1.7; }
-
-  /* ---------- home ---------- */
-  .hero-banner{ border:3px solid var(--maroon); border-radius:24px; overflow:hidden; box-shadow:0 6px 0 var(--maroon); background:var(--maroon); }
-  .hero-banner .scene{ display:block; width:100%; height:auto; }
-  .hero-banner .scene-m{ aspect-ratio:16/10; }
-  .hero-banner .scene-w{ display:none; aspect-ratio:1200/380; }
-  @media (min-width:640px){ .hero-banner .scene-m{ display:none; } .hero-banner .scene-w{ display:block; } }
-  .hero{ text-align:center; margin:30px 0 26px; }
-  .hero-eyebrow{ display:inline-block; font-size:12.5px; color:var(--cream); background:var(--rust); letter-spacing:3px; margin:0 0 12px; padding:5px 16px; border-radius:999px; font-weight:900; }
-  .hero-title{ font-size:32px; font-weight:900; color:var(--maroon); margin:0 0 8px; line-height:1.3; letter-spacing:1px; }
-  .hero-sub{ font-size:14.5px; color:var(--muted); margin:0; line-height:1.6; }
-  .hero-meta{ margin:14px 0 0; font-size:12.5px; color:var(--maroon); font-weight:700; letter-spacing:.5px; }
-  .hero-credit{
-    display:inline-flex; align-items:center; gap:6px; margin-top:12px; font-size:12px; letter-spacing:.5px;
-    color:var(--maroon); background:var(--pink); border:2px solid var(--maroon);
-    padding:6px 15px; border-radius:999px; font-weight:900; cursor:pointer;
-  }
-
-  .cat-list{ display:grid; grid-template-columns:1fr; gap:18px; }
-  .cat-card{
-    display:flex; align-items:center; gap:14px; width:100%; text-align:left; cursor:pointer;
-    background:var(--card); border:3px solid var(--maroon); border-radius:22px; padding:15px 16px;
-    box-shadow:0 5px 0 var(--maroon); transition:transform .12s, box-shadow .12s;
-  }
-  .cat-card.closed{ opacity:.75; border-style:dashed; box-shadow:none; background:transparent; cursor:pointer; }
-  .cat-card.closed:hover, .cat-card.closed:active{ transform:none; box-shadow:none; }
-  .cat-card:hover{ transform:translateY(-2px); box-shadow:0 7px 0 var(--maroon); }
-  .cat-card:active{ transform:translateY(4px); box-shadow:0 1px 0 var(--maroon); }
-  .cat-badge{
-    width:58px; height:58px; border-radius:16px; flex-shrink:0; border:2.5px solid var(--maroon);
-    display:flex; align-items:center; justify-content:center; font-family:var(--font-display); font-size:27px; transform:rotate(-4deg);
-  }
-  .cat-body{ flex:1; min-width:0; }
-  .cat-mile{ font-size:11px; letter-spacing:3px; color:var(--rust); font-weight:900; margin:0 0 2px; }
-  .cat-title{ font-size:18px; font-weight:900; color:var(--maroon); margin:0 0 2px; }
-  .cat-sub{ font-size:12.5px; color:var(--muted); margin:0; }
-  .cat-progress{ font-size:11.5px; color:var(--teal); margin:4px 0 0; font-weight:700; }
-  .cat-icon{ width:30px; height:30px; flex-shrink:0; fill:none; stroke:currentColor; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; opacity:.9; }
-
-  .fuel-panel{ margin-top:30px; background:var(--maroon); color:var(--cream); border-radius:22px; padding:16px 20px; display:flex; align-items:center; gap:14px; border:3px solid var(--maroon2); position:relative; }
-  .fuel-panel::after{ content:""; position:absolute; inset:6px; border:2px dashed rgba(253,236,203,.35); border-radius:16px; pointer-events:none; }
-  .fuel-panel{ flex-wrap:wrap; row-gap:10px; }
-  .fuel-panel-label{ flex:1; }
-  .fuel-panel-num{ order:2; }
-  .fuel-gauge{ order:3; flex:1 1 100%; display:flex; align-items:center; gap:10px; position:relative; z-index:1; }
-  .fuel-panel .fuel-bar{ flex:1; width:auto; height:12px; }
-  .fuel-ef{ font-family:var(--font-display); font-size:15px; color:var(--orange); position:relative; z-index:1; }
-  .fuel-panel-label{ font-size:13px; font-weight:900; white-space:nowrap; letter-spacing:1px; position:relative; z-index:1; }
-  .fuel-panel-num{ font-weight:900; color:var(--orange); font-size:14px; white-space:nowrap; position:relative; z-index:1; }
-  .fuel-note{ text-align:center; font-size:11.5px; color:var(--muted); margin:10px 0 0; }
-  .home-end{ margin:30px calc(50% - 50vw) -54px; width:100vw; }
-
-  /* ---------- category ---------- */
-  .narrow{ max-width:760px; margin:0 auto; }
-  .cat-header{ margin-bottom:22px; }
-  .cat-header-eyebrow{ font-size:13px; color:var(--rust); letter-spacing:3px; margin:0 0 6px; font-weight:900; }
-  .cat-header-title{ font-size:30px; font-weight:900; color:var(--maroon); margin:0; line-height:1.3; }
-  .item-list{ display:flex; flex-direction:column; gap:14px; }
-  .item-row{
-    display:flex; align-items:center; gap:12px; width:100%; text-align:left; cursor:pointer;
-    background:var(--card); border:3px solid var(--maroon); border-radius:18px; padding:14px 16px;
-    box-shadow:0 4px 0 var(--maroon); transition:transform .12s, box-shadow .12s;
-  }
-  .item-row:hover{ transform:translateY(-2px); }
-  .item-row:active{ transform:translateY(3px); box-shadow:0 1px 0 var(--maroon); }
-  .item-row.locked{ opacity:.6; cursor:default; border-style:dashed; box-shadow:none; background:transparent; }
-  .item-row.locked:hover, .item-row.locked:active{ transform:none; box-shadow:none; }
-  .item-num{ font-family:var(--font-display); font-size:16px; width:32px; height:32px; border-radius:10px; display:flex; align-items:center; justify-content:center; flex-shrink:0; border:2px solid var(--maroon); }
-  .item-row-title{ flex:1; font-size:16px; color:var(--ink); font-weight:700; }
-  .item-tag{ font-size:11px; color:var(--maroon); background:var(--sand); border-radius:999px; padding:3px 10px; flex-shrink:0; font-weight:700; }
-
-  /* ---------- item ---------- */
-  .crumb{ font-size:13px; color:var(--rust); letter-spacing:2px; margin:0 0 14px; font-weight:900; }
-  .item-grid{ display:grid; grid-template-columns:1fr; gap:22px; align-items:start; }
-  .content-card{ padding:28px 24px; }
-  .content-card > *{ position:relative; z-index:1; }
-  .scene-text{ font-size:19px; line-height:1.75; color:var(--ink); margin:0 0 22px; font-weight:500; }
-  .divider{ border:none; border-top:2px dashed var(--line); margin:0 0 20px; }
-  .advice-text{ font-size:16px; line-height:1.95; color:var(--ink); margin:0 0 16px; white-space:pre-line; }
-  .item-attrib{ font-size:12px; color:var(--rust); letter-spacing:.5px; margin:0; font-weight:900; }
-  .item-src{ font-size:11.5px; color:var(--muted); margin:4px 0 0; }
-  .item-side{ display:flex; flex-direction:column; gap:20px; }
-  .diagram-label{ font-size:12px; color:var(--maroon); margin:0 0 8px; letter-spacing:2px; font-weight:900; }
-  .diagram-box{ background:var(--sand); border:2.5px solid var(--maroon); border-radius:16px; padding:16px 18px; }
-  .pbar-row{ display:flex; align-items:center; gap:10px; margin-bottom:8px; }
-  .pbar-row:last-child{ margin-bottom:0; }
-  .pbar{ height:16px; border-radius:6px; flex-shrink:0; }
-  .pbar-label{ font-size:13.5px; color:var(--ink); font-weight:700; }
-  .fork-q{ background:var(--maroon); color:var(--cream); font-size:14.5px; padding:10px 14px; border-radius:10px; text-align:center; margin-bottom:10px; font-weight:900; }
-  .fork-row{ display:flex; gap:10px; }
-  .fork-opt{ flex:1; font-size:13.5px; padding:12px 8px; border-radius:10px; text-align:center; line-height:1.5; font-weight:900; }
-  .route-row{ display:flex; gap:4px; margin-bottom:10px; }
-  .route-seg{ height:26px; border-radius:7px; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; flex:none; }
-  .route-title{ font-size:12px; color:var(--muted); margin:10px 0 4px; font-weight:700; }
-  .role-row{ display:flex; align-items:center; gap:10px; margin-bottom:9px; }
-  .role-row:last-child{ margin-bottom:0; }
-  .role-dot{ width:24px; height:24px; border-radius:50%; flex-shrink:0; border:2px solid var(--maroon); }
-  .role-text{ font-size:14.5px; color:var(--ink); font-weight:700; }
-  .quote-preview{ cursor:pointer; transition:transform .15s; }
-  .quote-preview:active{ transform:scale(.98); }
-  .quote-preview-label{ font-size:11.5px; letter-spacing:3px; opacity:.85; margin:0 0 10px; font-weight:900; }
-  .quote-preview-text{ font-family:var(--font-serif); font-size:25px; font-weight:900; line-height:1.5; margin:0; white-space:pre-line; }
-  .quote-preview-cta{ font-size:12px; margin:14px 0 0; opacity:.85; }
-
-  /* ---------- quote fullscreen ---------- */
-  .quote-wrap{ max-width:560px; margin:0 auto; }
-  .quote-full{ min-height:460px; display:flex; flex-direction:column; justify-content:space-between; padding:34px 26px 26px; }
-  .quote-full-tag{ display:inline-block; border:2.5px solid currentColor; border-radius:999px; padding:5px 16px; font-size:13px; letter-spacing:2px; align-self:flex-start; font-weight:900; }
-  .quote-full-text{ font-family:var(--font-serif); font-size:36px; font-weight:900; line-height:1.55; margin:24px 0; white-space:pre-line; }
-  .quote-full-footer{ border-top:2px dashed currentColor; padding-top:12px; font-size:13px; line-height:1.7; font-weight:700; }
-  .quote-actions{ display:flex; gap:12px; margin-top:26px; }
-  .quote-actions .btn{ font-size:14.5px; padding:13px 10px; }
-  .save-hint{ text-align:center; font-size:12px; color:var(--muted); margin-top:14px; }
-
-  /* ---------- ≥ 640 ---------- */
-  @media (min-width:640px){
-    .view{ padding:32px 28px 64px; }
-    .topbar, .jointbar{ padding-left:max(28px, calc((100vw - 1080px)/2 + 28px)); padding-right:max(28px, calc((100vw - 1080px)/2 + 28px)); }
-    .home-end{ margin:34px calc(50% - 50vw) -64px; }
-    .cat-list{ grid-template-columns:1fr 1fr; }
-    .hero-title{ font-size:38px; }
-  }
-
-  /* ---------- ≥ 900 desktop ---------- */
+  @media (prefers-reduced-motion:reduce){ .view,.slide-l,.slide-r,.pop,.nav-btn.pulse .nv-k,.btn.hold.shake{ animation:none; } .track-car{ transition:none; } }
   @media (min-width:900px){
-    .view{ padding:44px 32px 80px; }
-    .topbar, .jointbar{ padding-left:max(32px, calc((100vw - 1080px)/2 + 32px)); padding-right:max(32px, calc((100vw - 1080px)/2 + 32px)); }
-    .home-end{ margin:40px calc(50% - 50vw) -80px; }
-    .hero-banner{ border-radius:30px; box-shadow:0 8px 0 var(--maroon); }
-    .hero{ margin:40px 0 32px; }
-    .hero-title{ font-size:44px; }
-    .hero-sub{ font-size:16px; }
-    .cat-card{ padding:20px 22px; }
-    .fuel-gauge{ order:2; flex:1 1 0; }
-    .fuel-panel-num{ order:3; }
-    .fuel-panel-label{ flex:none; }
-    .cat-title{ font-size:20px; }
-
-    .pf-banner{ display:block; width:100%; box-sizing:border-box; max-width:1080px; margin:44px auto 14px; padding:0 32px; }
-    .pf-banner-in{ border:3px solid var(--maroon); border-radius:30px; overflow:hidden; box-shadow:0 8px 0 var(--maroon); background:var(--maroon); }
-    .pf-banner .scene{ display:block; width:100%; height:auto; aspect-ratio:1200/380; }
-    .pf-grid{ display:block; min-height:0; }
-    .pf-visual{ display:none; }
-    .pf-body{ margin:0 auto; border-radius:0; padding:44px 32px 56px; max-width:760px; }
-    .pf-title{ font-size:34px; }
-
-    .item-grid{ grid-template-columns:minmax(0,1.4fr) minmax(0,1fr); gap:32px; }
-    .item-side{ position:sticky; top:96px; }
-    .content-card{ padding:40px 38px; }
-    .scene-text{ font-size:21px; }
-    .advice-text{ font-size:16.5px; }
+    .view{ padding:48px 20px 100px; }
+    .pf-brand{ font-size:56px; }
+    .pf-title{ font-size:28px; }
+    .pf-letter{ padding:34px 36px 28px; } .pf-letter p{ font-size:17.5px; }
+    .home-title{ font-size:40px; }
     .cat-header-title{ font-size:38px; }
+    .scene-text{ font-size:32px; }
+    .advice-text{ font-size:18.5px; }
+    .quote-preview-text{ font-size:29px; }
   }
 </style>
 </head>
 <body>
-<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs>
-<pattern id="chk" width="40" height="40" patternUnits="userSpaceOnUse"><rect width="40" height="40" fill="#FDECCB"/><rect width="20" height="20" fill="#8B9572"/><rect x="20" y="20" width="20" height="20" fill="#8B9572"/></pattern>
-<g id="star"><polygon points="0.0,-76.0 3.8,-9.2 53.7,-53.7 9.2,-3.8 76.0,0.0 9.2,3.8 53.7,53.7 3.8,9.2 0.0,76.0 -3.8,9.2 -53.7,53.7 -9.2,3.8 -76.0,0.0 -9.2,-3.8 -53.7,-53.7 -3.8,-9.2" fill="#C14F32"/><polygon points="0.0,-42.0 3.1,-7.4 29.7,-29.7 7.4,-3.1 42.0,0.0 7.4,3.1 29.7,29.7 3.1,7.4 0.0,42.0 -3.1,7.4 -29.7,29.7 -7.4,3.1 -42.0,0.0 -7.4,-3.1 -29.7,-29.7 -3.1,-7.4" fill="#FFF7E8" opacity=".9"/><circle r="9" fill="#C14F32"/></g>
-<g id="pump">
- <rect x="6" y="200" width="88" height="12" rx="3" fill="#831F20"/>
- <rect x="14" y="60" width="72" height="142" rx="10" fill="#FFF7E8" stroke="#831F20" stroke-width="4"/>
- <rect x="8" y="52" width="84" height="20" rx="8" fill="#C14F32" stroke="#831F20" stroke-width="4"/>
- <circle cx="50" cy="30" r="26" fill="#F3C3B8" stroke="#831F20" stroke-width="4"/>
- <path d="M50 42 C30 29 35 15 44 15 C48 15 50 18 50 21 C50 18 52 15 56 15 C65 15 70 29 50 42Z" fill="#831F20"/>
- <rect x="26" y="88" width="48" height="44" rx="6" fill="#F7DDC0" stroke="#831F20" stroke-width="3"/>
- <circle cx="50" cy="110" r="14" fill="#FFF7E8" stroke="#831F20" stroke-width="2"/>
- <path d="M50 110 L59 102" stroke="#831F20" stroke-width="2.5" stroke-linecap="round"/>
- <rect x="14" y="150" width="72" height="9" fill="#F0A12A"/>
- <rect x="86" y="96" width="10" height="52" rx="4" fill="#F0A12A" stroke="#831F20" stroke-width="3"/>
- <path d="M96 140 q26 8 18 56" fill="none" stroke="#831F20" stroke-width="5" stroke-linecap="round"/>
-</g>
-<g id="car">
- <ellipse cx="125" cy="108" rx="118" ry="5" fill="#831F20" opacity=".18"/>
- <path d="M6 78 L6 62 Q6 52 20 50 L52 46 Q64 26 96 22 L156 22 Q184 24 200 46 L228 52 Q244 56 244 70 L244 80 Q244 88 236 88 L14 88 Q6 88 6 78Z" fill="#F3C3B8" stroke="#831F20" stroke-width="4" stroke-linejoin="round"/>
- <path d="M70 44 Q80 30 100 28 L152 28 Q172 30 186 44Z" fill="#3E8C8B" stroke="#831F20" stroke-width="3" stroke-linejoin="round"/>
- <path d="M128 28 V44" stroke="#831F20" stroke-width="3"/>
- <path d="M10 66 H240" stroke="#C14F32" stroke-width="5"/>
- <circle cx="232" cy="60" r="8" fill="#F0A12A" stroke="#831F20" stroke-width="3"/>
- <rect x="212" y="80" width="34" height="8" rx="3" fill="#FFF7E8" stroke="#831F20" stroke-width="3"/>
- <rect x="2" y="80" width="30" height="8" rx="3" fill="#FFF7E8" stroke="#831F20" stroke-width="3"/>
- <circle cx="62" cy="90" r="18" fill="#831F20"/><circle cx="62" cy="90" r="8" fill="#FFF7E8"/><circle cx="62" cy="90" r="3" fill="#831F20"/>
- <circle cx="188" cy="90" r="18" fill="#831F20"/><circle cx="188" cy="90" r="8" fill="#FFF7E8"/><circle cx="188" cy="90" r="3" fill="#831F20"/>
-</g>
-<g id="sign">
- <rect width="440" height="270" rx="46" fill="#831F20"/>
- <rect x="14" y="14" width="412" height="242" rx="36" fill="none" stroke="#F0A12A" stroke-width="9" stroke-linecap="round" stroke-dasharray="0 20.2"/>
- <rect x="34" y="34" width="372" height="202" rx="26" fill="#FFF7E8"/>
- <rect x="44" y="44" width="352" height="182" rx="20" fill="none" stroke="#C14F32" stroke-width="2"/>
- <text x="220" y="84" text-anchor="middle" font-size="16" font-weight="700" letter-spacing="5" fill="#C14F32" style="font-family:var(--font-sans)">ROAD RESCUE MANUAL</text>
- <text x="220" y="154" text-anchor="middle" font-size="58" font-weight="900" fill="#831F20" style="font-family:var(--font-sans)">公路救援手冊</text>
- <g style="font-family:var(--font-sans)" font-weight="900" font-size="20" text-anchor="middle" fill="#831F20">
-  <circle cx="128" cy="200" r="20" fill="#FDECCB" stroke="#831F20" stroke-width="3"/><text x="128" y="207">愛</text>
-  <circle cx="174" cy="200" r="20" fill="#FDECCB" stroke="#831F20" stroke-width="3"/><text x="174" y="207">情</text>
-  <circle cx="220" cy="200" r="20" fill="#FDECCB" stroke="#831F20" stroke-width="3"/><text x="220" y="207">加</text>
-  <circle cx="266" cy="200" r="20" fill="#FDECCB" stroke="#831F20" stroke-width="3"/><text x="266" y="207">油</text>
-  <circle cx="312" cy="200" r="20" fill="#FDECCB" stroke="#831F20" stroke-width="3"/><text x="312" y="207">中</text>
- </g>
-</g>
-<g id="fuelTag"><rect width="180" height="54" rx="8" fill="#FFF7E8" stroke="#831F20" stroke-width="4"/><text x="90" y="35" text-anchor="middle" font-size="19" font-weight="900" letter-spacing="2" fill="#831F20" style="font-family:var(--font-sans)">FUEL STATION</text></g>
-</defs></svg>
 <div id="app">
 
-  <!-- PREFACE / 前言 -->
+  <!-- PREFACE -->
   <div class="view" id="view-preface">
-    <div class="pf-banner"><div class="pf-banner-in"><svg class="scene" viewBox="0 0 1200 380" preserveAspectRatio="xMidYMid slice" role="img" aria-label="愛情加油中 加油站場景">
- <rect width="1200" height="380" fill="#FDECCB"/>
- <circle cx="1010" cy="110" r="64" fill="#F7DDC0"/>
- <path d="M900 300 L934.2 190 L1055.8 190 L1090 300Z" fill="#EBAF7E"/><path d="M60 300 L90.6 210 L199.4 210 L230 300Z" fill="#E7A27C"/><path d="M250 300 L271.6 240 L348.4 240 L370 300Z" fill="#EBAF7E"/>
- <rect y="326" width="1200" height="54" fill="url(#chk)"/>
- <rect y="284" width="1200" height="44" fill="#831F20"/>
- <line x1="0" y1="306" x2="1200" y2="306" stroke="#FDECCB" stroke-width="5" stroke-dasharray="44 30"/>
- <rect x="590" y="236" width="26" height="50" fill="#F0A12A" stroke="#831F20" stroke-width="3"/>
- <use href="#sign" transform="translate(417,20) scale(.86)"/>
- <use href="#star" transform="translate(436,24) scale(.9)"/>
- <g transform="rotate(-6 100 60)"><use href="#fuelTag" transform="translate(40,30) scale(.8)"/></g>
- <use href="#pump" transform="translate(150,96) scale(.95)"/>
- <use href="#car" transform="translate(850,202)"/>
-</svg></div></div>
-    <div class="pf-grid">
-      <div class="pf-visual"><svg class="scene scene-tall" viewBox="0 0 600 760" preserveAspectRatio="xMidYMid slice" role="img" aria-label="愛情加油中 加油站場景">
- <rect width="600" height="760" fill="#FDECCB"/>
- <circle cx="470" cy="210" r="80" fill="#F7DDC0"/>
- <path d="M330 560 L366.0 420 L494.0 420 L530 560Z" fill="#EBAF7E"/><path d="M10 560 L40.599999999999994 460 L149.4 460 L180 560Z" fill="#E7A27C"/>
- <rect y="612" width="600" height="148" fill="url(#chk)"/>
- <rect y="556" width="600" height="56" fill="#831F20"/>
- <line x1="0" y1="584" x2="600" y2="584" stroke="#FDECCB" stroke-width="5" stroke-dasharray="44 30"/>
- <rect x="284" y="338" width="32" height="220" fill="#F0A12A" stroke="#831F20" stroke-width="3"/>
- <use href="#sign" transform="translate(80,70)"/>
- <use href="#star" transform="translate(104,76) scale(1.05)"/>
- <g transform="rotate(-8 90 410)"><use href="#fuelTag" transform="translate(22,396) scale(.8)"/></g>
- <use href="#pump" transform="translate(40,350)"/>
- <use href="#car" transform="translate(330,452)"/>
-</svg><svg class="scene" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid slice" role="img" aria-label="愛情加油中 加油站場景">
- <rect width="800" height="600" fill="#FDECCB"/>
- <circle cx="640" cy="150" r="70" fill="#F7DDC0"/>
- <path d="M560 470 L590.6 340 L699.4 340 L730 470Z" fill="#EBAF7E"/><path d="M40 470 L67.0 370 L163.0 370 L190 470Z" fill="#E7A27C"/>
- <rect y="520" width="800" height="80" fill="url(#chk)"/>
- <rect y="468" width="800" height="52" fill="#831F20"/>
- <line x1="0" y1="494" x2="800" y2="494" stroke="#FDECCB" stroke-width="5" stroke-dasharray="44 30"/>
- <rect x="384" y="330" width="32" height="140" fill="#F0A12A" stroke="#831F20" stroke-width="3"/>
- <use href="#sign" transform="translate(180,60)"/>
- <use href="#star" transform="translate(205,62) scale(1.05)"/>
- <g transform="rotate(-8 100 190)"><use href="#fuelTag" transform="translate(22,176) scale(.8)"/></g>
- <use href="#pump" transform="translate(60,312)"/>
- <use href="#car" transform="translate(520,412)"/>
-</svg></div>
-      <div class="pf-body">
-        <div class="pf-inner">
-          <div class="pf-logo-wrap">
-            <img class="pf-logo" id="pfLogo" src="" alt="想樂創意 wedding fun">
-            <span class="pf-logo-x">×</span>
-            <div class="pf-event-badge"><img id="wdLogo" src="" alt="WeddingDay 好婚市集"></div>
-          </div>
-          <p class="pf-eyebrow">想樂創意 × 好婚市集　聯合出品</p>
-          <h1 class="pf-title">在你們開始之前，<br>我想先說幾句話。</h1>
-
-          <div class="pf-letter dcard">
-            <p class="pf-letter-text">這本手冊裡的每一句話，都不是從網路上整理來的攻略，而是想樂創意主理人 Erin，帶著近二十年陪伴新人籌備婚禮的經驗，一點一滴累積下來的真實分享。</p>
-            <p class="pf-letter-text">從籌備過程中容易遇到的卡關、每個階段該怎麼做決定，到不同選擇背後可能需要付出的代價，這些都是我們實際經歷過、也陪著新人走過的事，所以才能把這些經驗整理出來，分享給你們。</p>
-            <p class="pf-letter-text">這次配合好婚市集「愛情加油中」的主題，我們把婚禮籌備中最容易卡關的地方，整理成五個不同的路段。你們可以跟著順序慢慢走，也可以直接從目前最讓你們煩惱的那一段開始，找到適合自己的方向。</p>
-            <p class="pf-letter-sign">— 想樂創意　主理人 Erin</p>
-          </div>
-
-          <div class="pf-howto">
-            <p class="pf-howto-title">怎麼使用這本手冊</p>
-            <div class="pf-step"><div class="pf-step-num" style="background:var(--rust)">1</div><p class="pf-step-text">先選一個<b>你們現在卡住</b>的路段，不用照順序看</p></div>
-            <div class="pf-step"><div class="pf-step-num" style="background:var(--teal)">2</div><p class="pf-step-text">每一則都是同一個結構：<b>拋錨現場</b>→<b>站長怎麼看</b>→<b>一張圖解</b>，三分鐘讀完</p></div>
-            <div class="pf-step"><div class="pf-step-num" style="background:var(--rust)">3</div><p class="pf-step-text">喜歡的句子可以<b>存成圖片</b>，轉給另一半或朋友</p></div>
-            <div class="pf-step"><div class="pf-step-num" style="background:var(--teal)">4</div><p class="pf-step-text">讀完的每一則，<b>幸福油量表</b>就會加滿一格</p></div>
-          </div>
-
-          <button class="btn" id="pfCtaBtn">開始翻手冊 →</button>
-          <p class="pf-footer">想樂創意 × 好婚市集　聯合出品<br>2026.11.14–15　華山文創園區 東二館</p>
-        </div>
+    <header class="pf-head">
+      <div class="pf-logos">
+        <img class="pf-logo" id="pfLogo" src="" alt="想樂創意 wedding fun">
+        <span class="pf-x">×</span>
+        <div class="pf-badge"><img id="wdLogo" src="" alt="WeddingDay 好婚市集"></div>
       </div>
+      <p class="pf-tag">愛情加油中</p>
+      <h1 class="pf-brand">公路救援手冊</h1>
+      <div class="road" aria-hidden="true"><span class="car"><svg viewBox="0 0 68 34" fill="currentColor" aria-hidden="true"><path d="M6 24v-6c0-2 1.3-3.700 3.200-4.200L18 12l7-8.500C26 2.500 27.300 2 28.700 2H44c1.500 0 2.800.6 3.800 1.700L55 12l6.500 1.800C63.500 14.300 65 16 65 18v6c0 1.100-.9 2-2 2h-3.200a7.500 7.500 0 0 0-14.600 0H24.800a7.500 7.500 0 0 0-14.600 0H8c-1.100 0-2-.9-2-2z"/><path fill="#FBF4EA" d="M25 12l5.500-6.500c.4-.5 1-.8 1.600-.8H36V12zM40 4.700h4.200c.7 0 1.300.3 1.800.8L51.500 12H40z"/><circle cx="17.500" cy="27" r="5.500" fill="#3A2A26"/><circle cx="52.500" cy="27" r="5.500" fill="#3A2A26"/><circle cx="17.500" cy="27" r="2" fill="#FBF4EA"/><circle cx="52.500" cy="27" r="2" fill="#FBF4EA"/></svg></span></div>
+    </header>
+    <h2 class="pf-title">在你們開始之前，<br>我想先說幾句話。</h2>
+    <div class="pf-letter">
+      <p>這本手冊裡的每一句話，都不是從網路上整理來的攻略，而是想樂創意主理人 Erin，帶著近二十年陪伴新人籌備婚禮的經驗，一點一滴累積下來的真實分享。</p>
+      <p>從籌備過程中容易遇到的卡關、每個階段該怎麼做決定，到不同選擇背後可能需要付出的代價，這些都是我們實際經歷過、也陪著新人走過的事，所以才能把這些經驗整理出來，分享給你們。</p>
+      <p>這次配合好婚市集「愛情加油中」的主題，我們把婚禮籌備中最容易卡關的地方，整理成五個不同的路段。你們可以跟著順序慢慢走，也可以直接從目前最讓你們煩惱的那一段開始，找到適合自己的方向。</p>
+      <p class="sign">— 想樂創意　主理人 Erin</p>
     </div>
-    <div class="checker"></div>
+    <div class="pf-howto">
+      <h3>怎麼使用這本手冊</h3>
+      <ul>
+        <li>先選一個<b>你們現在卡住</b>的路段，不用照順序看</li>
+        <li>每一則都是同一個結構：<b>問題</b>、<b>Erin 怎麼說</b>、<b>一張圖解</b>，三分鐘讀完</li>
+        <li>喜歡的句子可以<b>存成圖片</b>，轉給另一半或朋友</li>
+        <li>讀完的每一則，<b>幸福油量</b>就會加滿一格</li>
+      </ul>
+    </div>
+    <button class="btn" id="pfCtaBtn">開始翻手冊</button>
+    <p class="pf-footer">想樂創意 × 好婚市集　聯合出品<br>2026.11.14–15　華山文創園區 東二館</p>
   </div>
 
-  <div class="jointbar hidden" id="jointBar">
-    <span class="jb-mark">想樂創意</span><span class="jb-x">×</span><span class="jb-mark jb-b">好婚市集</span>
-    <span class="jb-label">聯合出品</span>
-  </div>
+  <div class="jointbar hidden" id="jointBar"><b>想樂創意</b> × <b>好婚市集</b>　聯合出品</div>
 
   <div class="topbar hidden">
     <button class="backbtn hidden" id="backBtn" aria-label="返回">‹</button>
@@ -480,116 +285,70 @@
 
   <!-- HOME -->
   <div class="view hidden" id="view-home">
-    <div class="hero-banner"><svg class="scene scene-m" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid slice" role="img" aria-label="愛情加油中 加油站場景">
- <rect width="800" height="600" fill="#FDECCB"/>
- <circle cx="640" cy="150" r="70" fill="#F7DDC0"/>
- <path d="M560 470 L590.6 340 L699.4 340 L730 470Z" fill="#EBAF7E"/><path d="M40 470 L67.0 370 L163.0 370 L190 470Z" fill="#E7A27C"/>
- <rect y="520" width="800" height="80" fill="url(#chk)"/>
- <rect y="468" width="800" height="52" fill="#831F20"/>
- <line x1="0" y1="494" x2="800" y2="494" stroke="#FDECCB" stroke-width="5" stroke-dasharray="44 30"/>
- <rect x="384" y="330" width="32" height="140" fill="#F0A12A" stroke="#831F20" stroke-width="3"/>
- <use href="#sign" transform="translate(180,60)"/>
- <use href="#star" transform="translate(205,62) scale(1.05)"/>
- <g transform="rotate(-8 100 190)"><use href="#fuelTag" transform="translate(22,176) scale(.8)"/></g>
- <use href="#pump" transform="translate(60,312)"/>
- <use href="#car" transform="translate(520,412)"/>
-</svg><svg class="scene scene-w" viewBox="0 0 1200 380" preserveAspectRatio="xMidYMid slice" role="img" aria-label="愛情加油中 加油站場景">
- <rect width="1200" height="380" fill="#FDECCB"/>
- <circle cx="1010" cy="110" r="64" fill="#F7DDC0"/>
- <path d="M900 300 L934.2 190 L1055.8 190 L1090 300Z" fill="#EBAF7E"/><path d="M60 300 L90.6 210 L199.4 210 L230 300Z" fill="#E7A27C"/><path d="M250 300 L271.6 240 L348.4 240 L370 300Z" fill="#EBAF7E"/>
- <rect y="326" width="1200" height="54" fill="url(#chk)"/>
- <rect y="284" width="1200" height="44" fill="#831F20"/>
- <line x1="0" y1="306" x2="1200" y2="306" stroke="#FDECCB" stroke-width="5" stroke-dasharray="44 30"/>
- <rect x="590" y="236" width="26" height="50" fill="#F0A12A" stroke="#831F20" stroke-width="3"/>
- <use href="#sign" transform="translate(417,20) scale(.86)"/>
- <use href="#star" transform="translate(436,24) scale(.9)"/>
- <g transform="rotate(-6 100 60)"><use href="#fuelTag" transform="translate(40,30) scale(.8)"/></g>
- <use href="#pump" transform="translate(150,96) scale(.95)"/>
- <use href="#car" transform="translate(850,202)"/>
-</svg></div>
-    <div class="hero">
-      <p class="hero-eyebrow">愛情加油中 ・ ROUTE 66</p>
-      <h1 class="hero-title">你們現在卡在哪一段？</h1>
-      <p class="hero-sub">點進去，看站長怎麼說</p>
-      <p class="hero-meta">11/14 SAT – 11/15 SUN　｜　華山文創園區 東二館</p>
-      <button class="hero-credit" id="heroCreditBtn">想樂創意 主理人 Erin・20 年婚顧經驗 真實回覆</button>
+    <div class="home-head">
+      <h1 class="home-title">你們現在卡在哪一段？</h1>
+      <p class="home-sub">挑一段進去，聽 Erin 怎麼說。</p>
+      <p class="home-meta">11/14–15　華山文創園區 東二館</p>
+      <button class="home-credit" id="heroCreditBtn">想樂創意 主理人 Erin，近 20 年婚顧經驗</button>
     </div>
-    <div class="cat-list" id="catList"></div>
-    <div class="contact dcard">
+    <div class="fuel-card">
+      <div class="fuel-top"><span>幸福油量</span><b id="panelFuelNum">0/9</b></div>
+      <div class="track">
+        <span class="car track-car" id="trackCar"><svg viewBox="0 0 68 34" fill="currentColor" aria-hidden="true"><path d="M6 24v-6c0-2 1.3-3.700 3.200-4.200L18 12l7-8.500C26 2.500 27.300 2 28.700 2H44c1.500 0 2.800.6 3.800 1.700L55 12l6.500 1.800C63.500 14.300 65 16 65 18v6c0 1.100-.9 2-2 2h-3.200a7.500 7.500 0 0 0-14.600 0H24.800a7.500 7.500 0 0 0-14.600 0H8c-1.100 0-2-.9-2-2z"/><path fill="#FBF4EA" d="M25 12l5.500-6.500c.4-.5 1-.8 1.600-.8H36V12zM40 4.700h4.200c.7 0 1.300.3 1.800.8L51.500 12H40z"/><circle cx="17.500" cy="27" r="5.500" fill="#3A2A26"/><circle cx="52.500" cy="27" r="5.500" fill="#3A2A26"/><circle cx="17.500" cy="27" r="2" fill="#FBF4EA"/><circle cx="52.500" cy="27" r="2" fill="#FBF4EA"/></svg></span>
+        <div class="fuel-bar"><div class="fuel-fill" id="panelFuelFill" style="width:0%"></div></div>
+      </div>
+      <p class="fuel-note">每讀完一則，車子就往終點開一點。紀錄只存在這台裝置。</p>
+    </div>
+    <div class="road-list" id="catList"></div>
+    <div class="contact">
       <p class="contact-t">還是卡住了？直接問想樂創意</p>
       <p class="contact-d">每對新人的狀況都不一樣，<br>想一對一聊聊，歡迎跟我們聯繫。</p>
-      <a class="btn line" href="https://lin.ee/ZD0p4qQ" target="_blank" rel="noopener">LINE 聯繫想樂創意 →</a>
-      <a class="btn ghost" href="https://www.weddingfunstudio.com/" target="_blank" rel="noopener">看想樂創意官網 →</a>
+      <a class="btn line" href="https://lin.ee/ZD0p4qQ" target="_blank" rel="noopener">LINE 聯繫想樂創意</a>
+      <a class="btn ghost" href="https://www.weddingfunstudio.com/" target="_blank" rel="noopener">看想樂創意官網</a>
     </div>
-    <div class="fuel-panel">
-      <span class="fuel-panel-label">幸福油量表</span>
-      <span class="fuel-panel-num" id="panelFuelNum">0/9</span>
-      <div class="fuel-gauge">
-        <span class="fuel-ef">E</span>
-        <div class="fuel-bar"><div class="fuel-fill" id="panelFuelFill" style="width:0%"></div></div>
-        <span class="fuel-ef">F</span>
-      </div>
-    </div>
-    <p class="fuel-note">紀錄只存在這台裝置，換手機或瀏覽器會重新開始</p>
-    <div class="checker home-end"></div>
   </div>
 
   <!-- CATEGORY -->
   <div class="view hidden" id="view-cat">
-    <div class="narrow">
-      <div class="cat-header">
-        <p class="cat-header-eyebrow" id="catEyebrow">MILE 01</p>
-        <h2 class="cat-header-title" id="catTitle">前方施工中</h2>
-      </div>
-      <div class="item-list" id="itemList"></div>
+    <div class="cat-header">
+      <p class="cat-mile" id="catEyebrow">MILE 01</p>
+      <h2 class="cat-header-title" id="catTitle">前方施工中</h2>
+      <p class="cat-header-sub" id="catSub"></p>
     </div>
+    <div class="item-list" id="itemList"></div>
   </div>
 
   <!-- ITEM -->
   <div class="view hidden" id="view-item">
-    <p class="crumb" id="itemCrumb">MILE 01 ｜ 前方施工中</p>
-    <div class="item-grid">
-      <div class="content-card dcard">
-        <span class="pill">拋錨現場</span>
-        <p class="scene-text" id="itemScene"></p>
-        <hr class="divider">
-        <span class="pill">站長怎麼看</span>
-        <p class="advice-text" id="itemAdvice"></p>
-        <p class="item-attrib">想樂創意 主理人 Erin　20 年婚顧經驗　親自回覆</p>
-        <p class="item-src" id="itemSrc"></p>
+    <p class="crumb" id="itemCrumb">MILE 01</p>
+    <div class="item-main">
+      <h2 class="scene-text" id="itemScene"></h2>
+      <div class="byline"><span class="byline-badge">想</span><span>想樂創意 主理人 Erin，親自回覆</span></div>
+      <div class="advice-text" id="itemAdvice"></div>
+      <p class="item-src" id="itemSrc"></p>
+      <div class="quote-preview sign" id="quotePreview">
+        <p class="quote-preview-text" id="quotePreviewText"></p>
+        <p class="quote-preview-cta">存成圖片，轉給另一半</p>
       </div>
-      <div class="item-side">
-        <div>
-          <p class="diagram-label" id="diagLabelOuter"></p>
-          <div class="diagram-box" id="itemDiagram"></div>
-        </div>
-        <div class="quote-preview sign" id="quotePreview">
-          <div class="sign-in" id="quotePreviewIn">
-            <p class="quote-preview-label">路邊的一句話</p>
-            <p class="quote-preview-text" id="quotePreviewText"></p>
-            <p class="quote-preview-cta">點我看大圖 →</p>
-          </div>
-        </div>
-        <button class="btn hold" id="markReadBtn"><span class="hold-t">按住 加滿這一格油</span></button>
-        <p class="hold-hint" id="holdHint">長按約 1 秒，幫這一題加油</p>
-        <p class="item-contact">這題跟你們的狀況很像？<br><a href="https://lin.ee/ZD0p4qQ" target="_blank" rel="noopener">LINE 跟我們聊聊 →</a>　<a href="https://www.weddingfunstudio.com/" target="_blank" rel="noopener">官網 →</a></p>
-      </div>
-      <div class="item-nav">
-        <button class="nav-btn" id="navPrev"></button>
-        <button class="nav-btn nx" id="navNext"></button>
-      </div>
+      <p class="diagram-label" id="diagLabelOuter"></p>
+      <div class="diagram-box" id="itemDiagram"></div>
+      <button class="btn hold" id="markReadBtn"><span class="hold-t">按住 加滿這一格油</span></button>
+      <p class="hold-hint" id="holdHint">長按約 1 秒，幫這一題加油</p>
+      <p class="item-contact">這題跟你們的狀況很像？<br><a href="https://lin.ee/ZD0p4qQ" target="_blank" rel="noopener">LINE 跟我們聊聊</a>　<a href="https://www.weddingfunstudio.com/" target="_blank" rel="noopener">看想樂創意官網</a></p>
+    </div>
+    <div class="item-nav">
+      <button class="nav-btn" id="navPrev"></button>
+      <button class="nav-btn nx" id="navNext"></button>
     </div>
   </div>
 
   <!-- QUOTE FULLSCREEN -->
   <div class="view hidden" id="view-quote">
     <div class="quote-wrap">
-      <div class="sign" id="quoteSign">
-        <div class="sign-in quote-full" id="quoteFull">
-          <span class="quote-full-tag" id="quoteFullTag">MILE 01</span>
-          <p class="quote-full-text" id="quoteFullText"></p>
-          <div class="quote-full-footer">想樂創意 × 好婚市集　聯合出品<br>主理人 Erin・20 年婚顧經驗<br>11/14–15 華山文創園區 東二館</div>
-        </div>
+      <div class="quote-full sign" id="quoteFull">
+        <span class="quote-full-tag" id="quoteFullTag">MILE 01</span>
+        <p class="quote-full-text" id="quoteFullText"></p>
+        <div class="quote-full-footer">想樂創意 × 好婚市集　聯合出品<br>主理人 Erin・近 20 年婚顧經驗<br>11/14–15 華山文創園區 東二館</div>
       </div>
       <div class="theme-row" id="themeRow"></div>
       <div class="quote-actions">
@@ -609,18 +368,11 @@
   "use strict";
 
   var COLORS = {
-    "01": {main:"#831F20", text:"#FFF3DC", bulb:"#F0A12A"},
-    "02": {main:"#3E8C8B", text:"#FFF7E8", bulb:"#F0A12A"},
-    "03": {main:"#C14F32", text:"#FFF7E8", bulb:"#F0A12A"},
-    "04": {main:"#F0A12A", text:"#5E1416", bulb:"#831F20"},
-    "05": {main:"#6E7C52", text:"#FFF7E8", bulb:"#F0A12A"}
-  };
-  var ICONS = {
-    "01":'<path d="M12 3L18 20H6z"/><path d="M8.6 13h6.8M7.4 16.6h9.2M4 21h16"/>',
-    "02":'<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="2"/><path d="M3 12h7M14 12h7M12 14v7"/>',
-    "03":'<rect x="4" y="3" width="10" height="18" rx="2"/><path d="M4 9h10M14 8h3a2 2 0 0 1 2 2v6a1.5 1.5 0 0 0 3 0V9l-3-3"/>',
-    "04":'<path d="M14.7 6.3a4 4 0 0 0-5 5L3 18l3 3 6.7-6.7a4 4 0 0 0 5-5l-2.5 2.5-2.5-.5-.5-2.5z"/>',
-    "05":'<path d="M5 21V4M5 5h13l-2.5 4 2.5 4H5"/>'
+    "01": {main:"#9D380E", text:"#FFF3E4"},
+    "02": {main:"#447C9F", text:"#FFFFFF"},
+    "03": {main:"#A56A2C", text:"#FFFFFF"},
+    "04": {main:"#5E7F62", text:"#FFFFFF"},
+    "05": {main:"#B5566B", text:"#FFFFFF"}
   };
 
   var DATA = [{"id":"m1","num":"01","title":"前方施工中","sub":"長輩、禮俗、人情桌","items":[{"id":"m1-0","title":"兩家人的意見都進來了，我夾在中間怎麼辦？","unlocked":true,"scene":"兩家人的意見都進來了，我夾在中間怎麼辦？","advice":"很多人問我：剛開始結婚，最要注意什麼小細節？我覺得最要注意的，是兩個人怎麼跟家裡溝通。\n\n因為要從兩個人變成兩家人，心態有很大的轉換。兩個人當然你好我好就好，但兩家人，從結婚之後，三舅媽、二姨丈的想法全部都會跑進來。你有沒有做好這個心理準備？這時候千萬不能想：我媽都沒管我了，你家為什麼要多嘴。那這個婚可能就結不成了，這是真的。\n\n最簡單的關鍵點是：你不能當傳聲筒，要當翻譯官。傳聲筒就是，媽媽說我不喜歡怎樣怎樣，你就原話轉出去，另一半一定會生氣。你要把話變成你自己的話，對方就比較能接受。\n\n我都給新人一個口訣：自己的父母，自己的家人自己搞定。這個法則，在整個籌備婚禮的過程中就不會有問題。\n\n當兩個人走向兩家人，最核心的關鍵是：口語要變、語句要變、語氣要不同。要站在對方的立場，了解對方的為難，用你自己的方式，說出對方聽了舒服的話。","quote":"自己的父母，\n自己搞定。","diagram":{"type":"compare","label":"圖解｜傳聲筒 vs 翻譯官","left":{"t":"傳聲筒","d":"原話轉述\n對方一定生氣","c":"#3A1E1A"},"right":{"t":"翻譯官","d":"換成自己的話\n對方聽得進去","c":"#3E8C8B"}},"src":"改寫自 Erin 影片 EP 2《當一個翻譯官》"},{"id":"m1-1","title":"賓客名單卡超久，每個人都想請怎麼辦？","unlocked":true,"scene":"賓客名單卡超久，每個人都想請怎麼辦？","advice":"很多人在籌備婚禮時，賓客名單總是卡超久，總覺得人生只有一次，要把所有重要的人都請來。但預算有限、桌數有限的時候，你會發現，婚禮真的不是人越多越好。所以賓客名單，我們要善用「減法原則」。\n\n第一個減法：善用一年法則。仔細想想，這一年有在聯絡、有互相出去的朋友，我們就邀請。超過一年的，老實說他也只是在你的回憶裡了，不用特別邀請到這場婚禮裡。\n\n第二個：分清楚你跟這個人的關係，是出自於禮貌，還是真的親密。比方有些同事，你每天都會見面，可是你們並沒有分享生活，這樣的關係，不見得要把喜帖分享給他。\n\n第三個，也是我覺得最重要的：把邊界還給父母。很多時候，爸媽那邊的桌數，變動性非常大。最簡單的方法，就是直接跟爸媽說好：50 人，或是 5 桌，這個空間完全讓父母去安排、決定，剩下你都不要過問。當然你自己也要留意，可以準備一點預備座，爸媽那邊如果增加了，你還有一些彈性。50 人跟 5 桌不是一樣的概念——西式婚宴是看人數，中式是看桌數。\n\n最後，把名單先都列出來，快速分類：哪些是一定要請的，哪些有點猶豫。猶豫的名單，再跟總桌數一起規劃。表單整理好之後，再去邀請。","quote":"賓客名單，\n先做減法。","diagram":{"type":"steps","label":"圖解｜名單怎麼減","items":["一年法則：這一年有聯絡嗎","禮貌，還是真的親密","邊界還給父母：50 人或 5 桌","先分類：一定要請／有點猶豫"]},"src":"改寫自 Erin 影片 EP 5.1《賓客名單怎麼抓》"},{"id":"m1-2","title":"很久沒聯絡、但對我很重要的人，要請嗎？","unlocked":true,"scene":"很久沒聯絡、但對我很重要的人，要請嗎？","advice":"可能我跟這個人兩年沒有聯繫，但我知道他對我生命的重量。這種人，我該請嗎？\n\n我覺得，如果你發現有一些好朋友，不常聯絡，但是他在你生命中的重量非常重，我會建議還是要邀請他。因為畢竟你都說了，他在你生命中是非常重要的人，那你就要把這個人生很重要的大事，邀請他一起來分享。","quote":"在你生命中很重的人，\n就請他一起來分享。","diagram":{"type":"compare","label":"圖解｜聯絡少，但要不要請","left":{"t":"只是聯絡少","d":"一年法則\n可以不請","c":"#3A1E1A"},"right":{"t":"生命中很重要","d":"邀請他\n一起分享","c":"#3E8C8B"}},"src":"改寫自 Erin 影片 EP 5.2《很久沒聯繫但重要的人 要請嗎？》"},{"id":"m1-3","title":"婚禮要辦幾桌？人越多越好嗎？","unlocked":true,"scene":"婚禮要辦幾桌？人越多越好嗎？","advice":"婚禮真的不是人越多就越好。疫情過後，我們已經從大桌數的婚禮，慢慢減少到精緻型的婚禮。\n\n我自己的體感是：疫情過後，大家發現生命是非常無價的，也讓我們知道真正的核心人物是誰，所以現在很流行比較小型的婚禮。\n\n在人生重要的時刻，我們把真正的焦點跟精力，放給真正重要的好朋友，好好經營，讓我們的感情細水長流。","quote":"婚禮不是\n人越多就越好。","diagram":{"type":"compare","label":"圖解｜大桌數 vs 精緻型","left":{"t":"大桌數","d":"人多\n焦點被分散","c":"#3A1E1A"},"right":{"t":"精緻型","d":"焦點給\n真正重要的人","c":"#3E8C8B"}},"src":"改寫自 Erin 影片 EP 5《婚禮人多才熱鬧》"}]},{"id":"m2","num":"02","title":"副駕不同路線","sub":"與另一半分工、想像落差","items":[{"id":"m2-0","title":"婚禮籌備前，我們兩個要先聊什麼？","unlocked":true,"scene":"婚禮籌備前，我們兩個要先聊什麼？","advice":"最核心的關鍵，是兩個人先坐下來對焦，聊聊你對婚禮有什麼期待。\n\n婚禮裡其實有三大族群：親情、友情、愛情。你最想把重點放在哪裡？是感謝家人，還是把我們的愛情放大一點，還是一場友情的 party？有沒有哪件事，是你在這場婚禮特別想做、特別喜歡的？\n\n再來是賓客的組成：想要長輩多一點，還是年輕人多一點？這也跟找場地很有關係——長輩適合好停車、吃圓桌桌菜；年輕人可能想要獨立的空間、有派對的感覺。這幾個問題，其實都能快速整理出方向。\n\n對焦的好處是：兩邊都想完成同一件事，目的地很清楚之後，中間就算有不同的長輩聲音進來，或是知道最新的資訊，心都是安定的，因為很清楚要往哪個方向去。也可能有一方覺得，我的想法好像變了，那也沒關係，我們再次對焦，就會往這個方向持續邁進。\n\n籌備婚禮有這麼多事情，不妨先兩個人坐下來，好好聊一聊：你的想像跟我的想像，我們期待的樣貌。我覺得這是最重要的第一步。","quote":"兩個人先坐下來，\n聊聊各自期待的婚禮。","diagram":{"type":"steps","label":"圖解｜重點放在哪一個","items":["親情：感謝家人","愛情：把愛放大","友情：一場朋友的 party"]},"src":"改寫自 Erin 影片 EP 3《婚前必做的事情》"},{"id":"m2-1","title":"快結婚了，怎麼確定眼前這個人適不適合？","unlocked":true,"scene":"快結婚了，怎麼確定眼前這個人適不適合？","advice":"很多人不太會判斷，是因為都在看對方有沒有車有房。但我覺得這些都不是最關鍵的。\n\n真的要常常去他家，跟他的家人相處，觀察他對家人、對朋友的態度。舉例來說，家裡有紛爭的時候，他會不會站出來講話？他做任何事情，會不會尊重他的家人？家裡的生活就是這樣，爸爸有需求、媽媽有需求、兄弟姐妹也有需求，他可能現在沒辦法立刻做到，那他會用什麼態度去回應？\n\n兩個人在一起，常常糾結的關鍵點，其實是：你在意的，雖然我不太明白，但我有沒有放在心上。感情很濃烈的時候，當然什麼都好；但終究有一天，我們會變成家人，是那種細水長流的感情。\n\n所以要看一個人，最關鍵的是看他怎麼對陌生人，還有他對家人的態度。那個最真實的模樣，就是你們結婚後的模樣。","quote":"最真實的模樣，\n就是你們結婚後的模樣。","diagram":{"type":"steps","label":"圖解｜看什麼才準","items":["看他怎麼對家人、朋友","看他怎麼對陌生人","你在意的，他有沒有放在心上"]},"src":"改寫自 Erin 影片 EP 1《另一半適合結婚嗎？》"},{"id":"m2-2","title":"另一半好像都在擺爛，怎麼辦？","unlocked":true,"scene":"另一半好像都在擺爛，怎麼辦？","advice":"我相信很多人在籌備婚禮的時候，一定超氣另一半。找廠商、問報價、準備了很多行程，問他意見，他卻說這件事我沒有想法、沒有感覺，所以你就超級生氣。其實他不是故意擺爛，只是在這件事上，他不知道從何幫忙起。\n\n第一，責任要分工。兩個人一定都有自己擅長的領域。比方他比較懂美食、懂喝酒，那選飯店、選酒水就可以交給他：「我覺得你這方面真的太厲害了，品味很好，餐廳跟酒水是不是交給你來負責？」分工說清楚之後，就不要特別去干涉，過一段時間了解一下進度就好。\n\n第二，用需求代替指責。你說「這件事我叫你做，你什麼都不去查」，他的大腦其實會當機。換成：「我最近真的有點疲累，可不可以麻煩你幫我去拿一下禮服？」或是「我想聽聽你的想法，因為這件事上你一定有不一樣的見解。」讓他感受到自己的價值跟被尊重，他自己就會導航起來。\n\n第三，大量的肯定。不要只看到自己忙碌的焦點，忽略了對方也有他的認真跟付出。他好像沒動起來的時候，也可以先肯定他。你也可以很真誠地讓他知道你現在的狀態，然後在這個過程中，找到對的溝通語言，一起往前走。\n\n籌備婚禮，只是你們兩個共同經營的第一個專案。要把你的需求好好讓對方知道，而不是把情緒直接丟給對方。","quote":"籌備婚禮，只是你們\n共同經營的第一個專案。","diagram":{"type":"steps","label":"圖解｜三招讓他動起來","items":["責任要分工","用需求代替指責","大量的肯定"]},"src":"改寫自 Erin 影片 EP 6《另一半擺爛怎麼辦？》"},{"id":"m2-3","title":"怎麼當另一半婚禮路上的神隊友？","unlocked":true,"scene":"怎麼當另一半婚禮路上的神隊友？","advice":"今天來教你如何當婚禮的神隊友。\n\n第一，家人給你的壓力，要自己出面處理。不要常常跟另一半說：我媽就是這樣，忍一忍就過了。千萬不能這麼做。你要把自己父母的想法，由你自己去溝通，千萬不是讓另一半，為你的孝順買單。\n\n第二，很多事不要自己瞎想、自己猜，要主動去問。「我覺得你最近好焦慮，你希望我陪你處理事情，還是好好聽你抱怨就好？」這樣兩個人才不會往不同的方向各自努力，然後覺得對方都沒有付出。\n\n第三，超級重要：先處理好情緒，再處理好事情。人在有情緒的當下，真的不想聽大道理，只想被理解、被同理、被安撫。因為在婚禮的過程中，我們都期待它很完美，可是有時候難免失去一些方向。所以好的神隊友，就是要緊緊 hold 住對方的心情。從現在開始，多問你的另一半：你需要我做什麼？","quote":"先處理好情緒，\n再處理好事情。","diagram":{"type":"steps","label":"圖解｜神隊友三件事","items":["自己的父母，自己溝通","主動問：陪你處理，還是聽你說","先接住情緒，再談事情"]},"src":"改寫自 Erin 影片 EP 7《如何成為神隊友》"},{"id":"m2-4","title":"婚禮要提早多久開始準備？","unlocked":true,"scene":"婚禮要提早多久開始準備？","advice":"備婚什麼時候開始最好？我最推薦一年的時間，最少最少也要七到八個月。婚禮真的有蠻多事情，如果時間很短，你對婚禮又有期待跟想像，你會很緊張。\n\n時間拉到一年，你可以針對現在婚禮流行的市場，搜尋所有資料，有更多選擇，甚至針對自己的預算、喜好，做不同的刪減。\n\n除了找廠商，家人的聲音也會陸陸續續進來。很多家人其實都是求好心切，尤其父母常有一個想法：雖然是孩子的婚禮，但也是我的成果發表會。當然會想說，怎麼樣可以讓這件事更好。\n\n如果時間很緊，你會把家人的聲音當成很緊張的干擾。但如果把時間拉長、情緒更輕鬆，你就更能體會爸爸媽媽愛你的最初的心——他只是把不同的想法提供你參考而已。有更多彈性空間的時候，你就可以決定哪些是你要的、哪些不要，甚至用很舒服的方法，讓家人或另一半一起商量，最後就會有一個方向。\n\n時間很急的話，口氣也會比較急。所以好的時間，是籌備婚禮一個很重要的關鍵。","quote":"時間拉長，\n才聽得見爸媽的初心。","diagram":{"type":"compare","label":"圖解｜時間怎麼影響心情","left":{"t":"時間很緊","d":"家人的聲音\n變成干擾","c":"#3A1E1A"},"right":{"t":"一年（至少 7–8 個月）","d":"體會初心\n自己決定要不要","c":"#3E8C8B"}},"src":"改寫自 Erin 影片 EP 4《備婚什麼時候開始？》"}]},{"id":"m3","num":"03","title":"油錢怎麼加","sub":"婚禮預算取捨法則","items":[]},{"id":"m4","num":"04","title":"修車廠怎麼挑","sub":"如何跟婚禮廠商溝通","items":[]},{"id":"m5","num":"05","title":"終點前的緊張","sub":"婚前焦慮","items":[{"id":"m5-0","title":"婚禮當天，要找親友總召還是一日總召？","unlocked":true,"scene":"婚禮當天，要找親友總召還是一日總召？","advice":"婚禮當天，最近大家最常見的困擾就是：我到底要找親友總召，還是一日總召？老實說，這件事沒有標準答案。\n\n親友總召最棒的地方，是他是你的朋友或家人，完全了解家裡哪些長輩、哪些貴賓特別重要，在現場可以讓所有家人跟親友，有賓至如歸的感受。\n\n很多新人希望當天所有的好朋友，都能好好坐下來吃飯、聊天，那一日總召就很符合這個期待。他可以幫你整合當天所有的廠商、喜餅與收禮的擺放位置，這些就交給一日總召來協助。\n\n快速釐清的方法很簡單：看婚禮事前，有沒有一個專業的團隊，例如婚顧、婚企，幫你把所有資訊整合好。如果沒有，像是只找一個純主持人，或只是簡單的家宴，那就很適合找一日總召。\n\n大家可以先看看，自己的婚禮最主要的需求是什麼。","quote":"事前有沒有專業團隊，\n是最快的分界線。","diagram":{"type":"compare","label":"圖解｜親友總召 vs 一日總召","left":{"t":"親友總召","d":"最懂長輩、貴賓\n親友賓至如歸","c":"#3A1E1A"},"right":{"t":"一日總召","d":"整合廠商與擺放\n好友安心坐下聊","c":"#3E8C8B"}},"src":"改寫自 Erin 影片 EP 9《親友總召一日總召要怎麼選？》"},{"id":"m5-1","title":"結婚誓言怎麼寫，才會感人？","unlocked":true,"scene":"結婚誓言怎麼寫，才會感人？","advice":"寫誓言，可以照三個步驟。\n\n第一，把感謝說具體。千萬不要只說「這麼多年來，真的非常謝謝你」，對方會想：謝謝我什麼？公式是：謝謝你＋肯定他的形容詞＋一個具體的事件與當下的心情＋他的行動，讓你看見對未來的想像。\n\n示範：「謝謝你總是話不多，永遠在我身後支持陪伴著我。還記得我爸爸生病住院的時候，我非常疲累、焦急，你每天接接送送，只是陪在我身邊。那時我就知道，未來不論發生任何事，你就是我的家、我的後盾。」人們感動的，不是抽象的形容詞，而是你們真正發生過的事。\n\n第二，寫真實，也坦承我們的不完美。比方我個性很急，你動作很慢，可是我很謝謝你每一次都包容我沒有的耐性，在我情緒不好的時候接住我。這樣寫，對方會感受到：你看明白了我們的不完美，而我們仍然願意站在彼此身邊。\n\n第三，下一個承諾。回想他很脆弱、很低潮的瞬間，你會怎麼陪他走過？好的誓言，不是許下很多美好的願望，而是我看過你的低潮與軟弱，仍然願意牽著你的手，走向我們憧憬的幸福。","quote":"感動人的不是形容詞，\n是真正發生過的事。","diagram":{"type":"steps","label":"圖解｜誓言三步驟","items":["感謝說具體：公式＋真實事件","坦承我們的不完美","承諾：低潮時，我怎麼陪你走過"]},"src":"改寫自 Erin 影片 EP 8《結婚誓言怎麼寫》、EP 8.1《感人誓言這樣寫》"}]}];
@@ -678,21 +430,19 @@
     wrap.innerHTML = "";
     DATA.forEach(function(cat){
       var c = COLORS[cat.num];
-      var card = document.createElement("button");
       var open = cat.items.length > 0;
-      card.className = "cat-card" + (open ? "" : " closed");
-      card.innerHTML =
-        '<div class="cat-badge" style="background:'+c.main+'; color:'+c.text+'">'+cat.num+'</div>'+
-        '<div class="cat-body">'+
-          '<p class="cat-mile">MILE '+cat.num+'</p>'+
-          '<p class="cat-title">'+cat.title+'</p>'+
-          '<p class="cat-sub">'+cat.sub+'</p>'+
-          '<p class="cat-progress" data-cat="'+cat.id+'"></p>'+
-        '</div>'+
-        '<svg class="cat-icon" viewBox="0 0 24 24" style="color:var(--maroon)" aria-hidden="true">'+ICONS[cat.num]+'</svg>';
-      if(open){ card.onclick = function(){ openCategory(cat.id); }; }
-      else { card.onclick = function(){ window.open("https://lin.ee/ZD0p4qQ","_blank","noopener"); }; }
-      wrap.appendChild(card);
+      var b = document.createElement("button");
+      b.className = "stop" + (open ? "" : " closed");
+      b.innerHTML =
+        '<span class="stop-dot" style="background:'+c.main+'; color:'+c.text+'">'+cat.num+'</span>'+
+        '<span class="stop-body">'+
+          '<span class="stop-title" style="display:block">'+cat.title+'</span>'+
+          '<span class="stop-sub" style="display:block">'+cat.sub+'</span>'+
+          '<span class="stop-progress cat-progress" style="display:block" data-cat="'+cat.id+'"></span>'+
+        '</span><span class="stop-go" aria-hidden="true">\u203A</span>';
+      if(open){ b.onclick = function(){ openCategory(cat.id); }; }
+      else { b.onclick = function(){ window.open("https://lin.ee/ZD0p4qQ","_blank","noopener"); }; }
+      wrap.appendChild(b);
     });
     updateFuelUI();
   }
@@ -703,6 +453,7 @@
   function openCategory(catId){
     currentCat = DATA.filter(function(c){return c.id===catId;})[0];
     document.getElementById("catEyebrow").textContent = "MILE "+currentCat.num;
+    document.getElementById("catSub").textContent = currentCat.sub;
     document.getElementById("catTitle").textContent = currentCat.title;
     var wrap = document.getElementById("itemList");
     wrap.innerHTML = "";
@@ -712,10 +463,10 @@
       row.className = "item-row" + (it.unlocked ? "" : " locked");
       var numHtml = it.unlocked
         ? '<div class="item-num" style="background:'+c.main+'; color:'+c.text+'">'+(idx+1)+'</div>'
-        : '<div class="item-num" style="background:#E6C99B; color:#8A6A55">'+(idx+1)+'</div>';
+        : '<div class="item-num" style="background:#E9DAC8; color:#9A8579">'+(idx+1)+'</div>';
       row.innerHTML = numHtml +
         '<div class="item-row-title">'+it.title+'</div>' +
-        '<div class="item-tag">'+(it.unlocked ? "點我看看" : "Erin 回覆中")+'</div>';
+        '<div class="item-tag">'+(it.unlocked ? "看 \u203A" : "Erin 回覆中")+'</div>';
       if(it.unlocked){
         row.onclick = function(){ openItem(currentCat, it); };
       }
@@ -751,7 +502,7 @@
       row.className = "fork-row";
       row.innerHTML =
         '<div class="fork-opt" style="background:'+COLORS[cat.num].main+'; color:'+COLORS[cat.num].text+'">會<br>'+diagram.yes.label.replace("\n","<br>")+'</div>'+
-        '<div class="fork-opt" style="background:#3A1E1A; color:#FDECCB">不會<br>'+diagram.no.label.replace("\n","<br>")+'</div>';
+        '<div class="fork-opt" style="background:#8A5A44; color:#FFF8EE">不會<br>'+diagram.no.label.replace("\n","<br>")+'</div>';
       box.appendChild(row);
     } else if(diagram.type === "route"){
       labelEl.textContent = "圖解｜怎麼分工";
@@ -761,7 +512,7 @@
     } else if(diagram.type === "compare"){
       labelEl.textContent = diagram.label;
       box.innerHTML = '<div class="fork-row cmp">'+[diagram.left,diagram.right].map(function(s){
-        return '<div class="fork-opt" tabindex="0" role="button" style="background:'+s.c+'; color:#FFF7E8"><b style="display:block; font-size:15px; margin-bottom:4px">'+s.t+'</b>'+s.d.replace("\n","<br>")+'</div>';
+        return '<div class="fork-opt" tabindex="0" role="button" style="background:'+(s===diagram.right?'#447C9F':'#8A5A44')+'"><b style="display:block; font-size:15px; margin-bottom:4px">'+s.t+'</b>'+s.d.replace("\n","<br>")+'</div>';
       }).join("")+'</div><p class="diag-hint">點一下，標出你們比較像哪一邊</p>';
       var cmp = box.querySelector(".cmp");
       cmp.querySelectorAll(".fork-opt").forEach(function(opt){
@@ -777,7 +528,7 @@
     } else if(diagram.type === "steps"){
       labelEl.textContent = diagram.label;
       box.innerHTML = diagram.items.map(function(s,i){
-        return '<div class="role-row step-row" tabindex="0" role="button"><div class="role-dot" style="background:'+(i%2?'#3E8C8B':'#C14F32')+'; color:#fff; font-size:12px; font-weight:900; display:flex; align-items:center; justify-content:center">'+(i+1)+'</div><span class="role-text">'+s+'</span></div>';
+        return '<div class="role-row step-row" tabindex="0" role="button"><div class="role-dot" style="background:'+(i%2?'#447C9F':'#9D380E')+'; color:#fff; font-size:12px; font-weight:900; display:flex; align-items:center; justify-content:center">'+(i+1)+'</div><span class="role-text">'+s+'</span></div>';
       }).join("")+'<p class="diag-hint">做完一步，點一下打勾</p>';
       box.querySelectorAll(".step-row").forEach(function(row){
         function tog(){ row.classList.toggle("chk"); var d = row.querySelector(".role-dot"); d.textContent = row.classList.contains("chk") ? "✓" : d.getAttribute("data-n"); }
@@ -798,14 +549,14 @@
 
   function paintSign(signEl, inEl, c){
     signEl.style.background = c.main; signEl.style.color = c.text;
-    inEl.style.borderColor = c.bulb;
   }
 
   function openItem(cat, item){
     currentCat = cat; currentItem = item;
-    document.getElementById("itemCrumb").textContent = "MILE "+cat.num+" ｜ "+cat.title;
+    document.getElementById("itemCrumb").textContent = "MILE "+cat.num+"　"+cat.title;
     document.getElementById("itemScene").textContent = item.scene;
-    document.getElementById("itemAdvice").textContent = item.advice;
+    var adv = document.getElementById("itemAdvice"); adv.innerHTML = "";
+    item.advice.split(/\n\s*\n/).forEach(function(par){ var p = document.createElement("p"); p.textContent = par; adv.appendChild(p); });
     document.getElementById("itemSrc").textContent = item.src || "";
     document.getElementById("quotePreviewText").textContent = item.quote;
     var qp = document.getElementById("quotePreview");
@@ -844,32 +595,11 @@
     }
   }
 
-  // car drives along the road as fuel fills up
-  var carEls = [];
-  function initCar(){
-    document.querySelectorAll('.hero-banner use[href="#car"]').forEach(function(el){
-      var m = /translate\(([\d.]+),\s*([\d.]+)\)/.exec(el.getAttribute("transform"));
-      if(!m) return;
-      var W = el.ownerSVGElement.viewBox.baseVal.width;
-      var x1 = +m[1];
-      carEls.push({el:el, x0:(W>1000?300:200), x1:x1, y:+m[2], cur:(W>1000?300:200)});
-    });
-  }
+  // the little car rides the fuel bar
   function driveCar(anim){
+    var el = document.getElementById("trackCar"); if(!el) return;
     var p = UNLOCKED_IDS.length ? fuelCount()/UNLOCKED_IDS.length : 0;
-    carEls.forEach(function(c){
-      var target = c.x0 + (c.x1-c.x0)*p;
-      if(!anim || reduce){ c.cur = target; c.el.setAttribute("transform","translate("+target+","+c.y+")"); return; }
-      var from = c.cur, t0 = null;
-      function f(ts){
-        if(t0===null) t0 = ts;
-        var k = Math.min(1,(ts-t0)/1100), e = 1-Math.pow(1-k,3);
-        c.cur = from+(target-from)*e;
-        c.el.setAttribute("transform","translate("+c.cur+","+c.y+")");
-        if(k<1) requestAnimationFrame(f);
-      }
-      requestAnimationFrame(f);
-    });
+    el.style.left = "calc("+p+" * (100% - 34px))";
   }
 
   function setupHold(btn, item){
@@ -957,7 +687,7 @@
   var quoteTheme = null;
   function openQuote(cat, item){
     quoteTheme = null;
-    paintSign(document.getElementById("quoteSign"), document.getElementById("quoteFull"), COLORS[cat.num]);
+    paintSign(document.getElementById("quoteFull"), document.getElementById("quoteFull"), COLORS[cat.num]);
     var row = document.getElementById("themeRow");
     row.innerHTML = '<span>換個招牌顏色</span>';
     Object.keys(COLORS).forEach(function(k){
@@ -968,11 +698,11 @@
         quoteTheme = k;
         row.querySelectorAll(".theme-chip").forEach(function(x){ x.classList.remove("on"); });
         b.classList.add("on");
-        paintSign(document.getElementById("quoteSign"), document.getElementById("quoteFull"), COLORS[k]);
+        paintSign(document.getElementById("quoteFull"), document.getElementById("quoteFull"), COLORS[k]);
       };
       row.appendChild(b);
     });
-    document.getElementById("quoteFullTag").textContent = "MILE "+cat.num;
+    document.getElementById("quoteFullTag").textContent = "MILE "+cat.num+"　"+cat.title;
     document.getElementById("quoteFullText").textContent = item.quote;
     document.getElementById("saveHint").textContent = "電腦按「下載金句圖」，手機可直接截圖或長按存圖";
     showView("quote", "路邊的一句話");
@@ -987,41 +717,31 @@
   function drawQuoteCanvas(){
     var c = COLORS[quoteTheme || currentCat.num];
     var cv = document.getElementById("drawCanvas"), ctx = cv.getContext("2d"), W = cv.width, H = cv.height;
-    ctx.fillStyle = "#FDECCB"; ctx.fillRect(0,0,W,H);
-    function checker(y){
-      for(var r=0;r<2;r++){ for(var i=0;i<W/30;i++){
-        ctx.fillStyle = ((i+r)%2) ? "#FDECCB" : "#8B9572"; ctx.fillRect(i*30,y+r*30,30,30);
-      } }
-    }
-    checker(0); checker(H-60);
+    ctx.fillStyle = "#FBF4EA"; ctx.fillRect(0,0,W,H);
+    var g = ctx.createRadialGradient(W-40,20,10,W-40,20,620);
+    g.addColorStop(0,"#F8D9C8"); g.addColorStop(1,"rgba(248,217,200,0)");
+    ctx.fillStyle = g; ctx.fillRect(0,0,W,H);
 
-    var sx=60, sy=120, sw=W-120, sh=830;
-    ctx.fillStyle = "rgba(58,30,26,.25)"; rr(ctx,sx,sy+10,sw,sh,52); ctx.fill();
-    ctx.fillStyle = c.main; rr(ctx,sx,sy,sw,sh,52); ctx.fill();
-    ctx.save();
-    ctx.strokeStyle = c.bulb; ctx.lineCap = "round"; ctx.lineWidth = 16; ctx.setLineDash([0,38]);
-    rr(ctx,sx+30,sy+30,sw-60,sh-60,30); ctx.stroke();
-    ctx.restore();
+    var sx=60, sy=110, sw=W-120, sh=840;
+    ctx.fillStyle = "rgba(58,42,38,.10)"; rr(ctx,sx,sy+14,sw,sh,56); ctx.fill();
+    ctx.fillStyle = c.main; rr(ctx,sx,sy,sw,sh,56); ctx.fill();
 
-    ctx.fillStyle = c.text; ctx.strokeStyle = c.text; ctx.textBaseline = "middle";
-    ctx.lineWidth = 4; rr(ctx,sx+80,sy+80,230,58,29); ctx.stroke();
-    ctx.font = "900 28px 'Noto Sans TC', sans-serif";
-    ctx.fillText("MILE "+currentCat.num, sx+110, sy+110);
+    ctx.fillStyle = c.text; ctx.textBaseline = "middle"; ctx.textAlign = "left";
+    ctx.font = "500 30px 'Noto Sans TC', sans-serif";
+    ctx.fillText("MILE "+currentCat.num+"　"+currentCat.title, sx+80, sy+110);
+    ctx.font = "900 64px 'Noto Serif TC', serif";
+    var y = sy+330;
+    currentItem.quote.split("\n").forEach(function(line){ ctx.fillText(line, sx+80, y); y += 102; });
+    ctx.globalAlpha = .45; ctx.fillRect(sx+80, sy+sh-130, sw-160, 2); ctx.globalAlpha = 1;
+    ctx.font = "500 26px 'Noto Sans TC', sans-serif";
+    ctx.fillText("路邊的一句話", sx+80, sy+sh-85);
 
-    ctx.font = "900 62px 'Noto Serif TC', serif";
-    var y = sy+300;
-    currentItem.quote.split("\n").forEach(function(line){ ctx.fillText(line, sx+80, y); y += 98; });
-
-    ctx.setLineDash([14,10]); ctx.lineWidth = 3;
-    ctx.beginPath(); ctx.moveTo(sx+80, sy+sh-130); ctx.lineTo(sx+sw-80, sy+sh-130); ctx.stroke(); ctx.setLineDash([]);
-    ctx.font = "700 26px 'Noto Sans TC', sans-serif";
-    ctx.fillText("路邊的一句話", sx+80, sy+sh-90);
-
-    ctx.fillStyle = "#831F20"; ctx.textAlign = "center";
-    ctx.font = "900 28px 'Noto Sans TC', sans-serif";
-    ctx.fillText("想樂創意 × 好婚市集　聯合出品", W/2, 1015);
+    ctx.fillStyle = "#9D380E"; ctx.textAlign = "center";
+    ctx.font = "700 28px 'Noto Sans TC', sans-serif";
+    ctx.fillText("想樂創意 × 好婚市集　聯合出品", W/2, 1030);
+    ctx.fillStyle = "#6B574F";
     ctx.font = "500 24px 'Noto Sans TC', sans-serif";
-    ctx.fillText("主理人 Erin・20 年婚顧經驗　｜　11/14–15 華山文創園區 東二館", W/2, 1060);
+    ctx.fillText("主理人 Erin・近 20 年婚顧經驗　｜　11/14–15 華山文創園區 東二館", W/2, 1075);
     ctx.textAlign = "left";
   }
   document.getElementById("downloadBtn").onclick = function(){
@@ -1103,7 +823,7 @@
     navStack = ["home"];
   };
   document.getElementById("infoBtn").onclick = function(){
-    document.getElementById("pfCtaBtn").textContent = "回到手冊 →";
+    document.getElementById("pfCtaBtn").textContent = "回到手冊";
     showView("preface");
     navStack = ["preface"];
   };
@@ -1114,7 +834,6 @@
   document.getElementById("pfLogo").src = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAA0JCgsKCA0LCgsODg0PEyAVExISEyccHhcgLikxMC4pLSwzOko+MzZGNywtQFdBRkxOUlNSMj5aYVpQYEpRUk//2wBDAQ4ODhMREyYVFSZPNS01T09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0//wAARCACWAJYDASIAAhEBAxEB/8QAGwABAAIDAQEAAAAAAAAAAAAAAAUGAwQHAgH/xAA4EAACAgIBAgMEBgkFAQAAAAAAAQIDBBEFEiEGEzEiQVFhMnGBkaGxBxQWNGJkcsHhFSNCk9FS/8QAGQEBAAMBAQAAAAAAAAAAAAAAAAECAwQF/8QAIhEBAAIBAwQDAQAAAAAAAAAAAAECEQMSIQQUMVETIkEF/9oADAMBAAIRAxEAPwDpwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABhy8mrExbMi+XTXXFyk/kDyzA55keN+SnfJ49VFdW/ZjKLk0vm9+pi/bXmP5b/rf/ph3FHVHSajpAOb/trzH8t/1v8A9PsfG3LqSco40kn3Xltb/EdxQ7PUdHBo8RyVPK8fXl09urtKL9YS96K/yvK35V06oyddMW10xfr9Z06dd/hx6lvj8rLZn4lT6bMmqL+Dkj3Tl4971TfXN/CMk2UQJtNNPTXo0b/BHth88+nQQVviOanGyOPmS6oy7RsfqvrLIYWrNZxLel4tGYAAVWAAAAAAAACo/pBy5V4ONiReldNyn81H/L/AtxR/0iVy83Bt/wCOpx+3szLWnFJb9NETqxlTAAec9gAAFs/R/lyhyN+G37FsOtL+KP8Ah/gfb/3i3+uX5mr4ErlPxCpr0rpk39ukbV/7xb/XL8z1+gn6S8H+nERqQ8AA73mhcuFyXk8bXKb3KHsSfx1/gppafDEWuOm36O16+5GOtH1baE/ZMAA5XWAAAAAAAAET4m4t8txNlNaXnQfmVb/+l7vtXYlgRMRMYlatprMTDisoyhJxnFxlF6aa00/gfDpXiDwtj8rJ5FElj5T9Za3Gf9S/uPDvhini4O3LVV+VJ/S1tQXwW/zOLt7bsfj0u8ptz++nNQdU53gcXlsSUVCFWQu9dqj3T+D+KIvg/BtWHdHI5GyORZF7jXFewn8Xv1E9PbOII6yk1zPll8E8TPBwJZWRBxuydNRfrGC9Pv8AX7iHv/eLf65fmX4hOT4KN85XYslXZLu4v6Lf9j0enmunw8jqd2rO5WTd4nA/X8ry5Sca4rqm16/ULOKz65aeLN/OPdfgSnh7Dy8fKsndTKuuUNPq7NvfY6b3jbxLlpSd0ZhsZPC8cq1Hq8ibeoyc/V/U/UkMWmrBxIUqaUY9tyetsqvi/geS5Lkqr8SCuq8tQ6XNLoe337/E3s7ic6eHhVqXnypqUJ+16y+Pc46Xte223h23066dIvXmZ/FhsthVDrsnGEfjJ6R6TTSae0yo+I+C5PM4vAqoaulQmrK+rW2/Rrfrr0Jvw5hZPH8LRjZck7Y7bSe1FN7S38im6d81xx7X2R8cWzz6SgALqAAAAAAfHKMWk5JN/Fn0j+WxbsiNMseKdkJNPb17MlpkxGZRM4hvqcZPUZJ9t9n7j4rISm4RnFyj6pPuiO4rCtxrbnbFJJKupp73BNtfmYeNwL6MuMroz3BzfWpR6ZdX4v7Sdsc8q7p44SOXmVYsU7HtuSXSmt93rejLbbCqDlOSS+b1shsvAyLMq9xojZ5ltc42uS9lLW18Ta5LFtuyqLY0q+EYzi4Npab9H3J2xxyjdPPDLZnSfH15eNjTu63HUOpRem9b79uxtzshD6c4x9/d6IuWFe+DoxehO2DhtbXultnvkcKeTlQmq4zhGmyPfX0n6EbYz5TunHhJOUVHqckl8Wzyra3rVkHv5oiM6qVfHYFc+jza3H2JtalqPf1en95scPVjSwK3XBS6XJblBb3vv9m0vuQmvGSLc4euS5fHwPJi4yusvl01wrcdv72lrsbnnVpe3KMH09TUmk0iK5TilkcjxllWLTKqi2Tt3GK1HT129/fuaniHjs7JzrLMTGV0bsGeNvrUemTe9vfuMZtaMuiK1nEZWKVtcYqUpxUX6NvSYrshbBTrnGcX6Si9pkNyPG3ZWDxVDpjNUX1SujJrSilp/WZvD2FdgcdKi+tQfn2SjFNNKLk2vT5Fomc4wrNa7c55SoALKAAAAAAamfn04Kqd0bH5k1BdMG+7ejbIvmqvM8uX6rK9V+2/elprtr3t/kmRacRwtWImeXvG5ejIzP1aFdik3NJvWvZen79kiV7i8dx5CN0ce1RjOxNvajFSbaa3FN9l3+G16lhIpMzHKbxETiB9iL/17B3F9UnBt7nr2YpPW9/Mk36FVjxWRLJqshteZZPcpqW+22n69u/dehF5mPCaRWc7llxMivLxoX1b6Jra2ZjR4Wl0cbCDUovbbjJNOPf07m8WjwpaMTw1ORycbGx95MFZt+zX09Tk/kv7+4wU8rjy8muuqyLm1Hpcenp22v7e4xeIYznjUxrrlLVqlJpNpJfHX1o0MKiUbcXUZv8A3tfRl6KUm5b0tLv7yk2nOGlaV25lZgEGaMkRd4gxarZw8q2Sh9KUenWu/p37+noSOJkwyqFdVvpe1p62vuK7lUSeVbdZC+Pmy64xdLk9ba129/sp6/iJziozrwKqbIWRlUuh9fq9e/7TOszM8tL1rEZhuAA0ZgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/9k=";
   document.getElementById("wdLogo").src = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAA0JCgsKCA0LCgsODg0PEyAVExISEyccHhcgLikxMC4pLSwzOko+MzZGNywtQFdBRkxOUlNSMj5aYVpQYEpRUk//2wBDAQ4ODhMREyYVFSZPNS01T09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0//wAARCABuAG4DASIAAhEBAxEB/8QAGgABAAIDAQAAAAAAAAAAAAAAAAEEAgMFBv/EAC4QAAICAgEBBwQCAQUAAAAAAAECAAMEERIhBRMxQVFhcRQiMpFSgaFCQ7HB4f/EABgBAQEBAQEAAAAAAAAAAAAAAAABAgME/8QAIBEBAQEBAAEEAwEAAAAAAAAAAAECESEDEkGhMVHB8P/aAAwDAQACEQMRAD8A9zESZxeskyJMBJiIQiIgIiICIiAiIgYxEmFJMiTCEREBERAREQEREBJiIGEmY2WJVU1lh4oo2T6CUq8676jGFtapXlb4L15L02N/MNTNvlf2B4yZU7QWu/ByKywJVd9D1U62JPZ9pswMZrWHePWCdnqfeD2+OrUSvmZIxqQ/HkS6prfqdSc7I+kxnt48ipAA347OoJm1via1sZsi2o1sFTWnPg2/T4myGSJT7QybKaaxjBWtucVox/EE+ZmjErutN3HPvNlVnAlgChOv4+kNzHjtdOJz68jKzEpalkoQqebkcvuB1xAPxuZ/U5SMaPp++tHXvB9qEeRJ9faE9lXolI35lCd7lLQah+XdsdqPXr4y9CWcUu08ezJwLKqtcm10J1vR8JWzGRe2cV7SFSml7Ovr4anUmD1V2MrPWrMh2pI2R8Q1nfPv7cKh7L/rqh0yMq4VBd9UUDqT7AGY0qByzmYL3bnuxy23FNgKB/zO+tVaWNYtah3/ACYDqfmQlFKMzJUis/5EKNmG76s+I85Qyd/ilyGdEORc5P5NrYX+un7ihq7rsPv2HeWMb77GPl4hf0PD3nolxqF48aaxw/HSjp8QuNQoUCmsBTtRxHQ+scavrT9OGMwulbFmJycs2BVPXiutAfJAkM914yDfYx55C12rXs8K18f62dTvJj0px4VIvDfHSga346nJ7a0riiteC2KbHCDRtbegvv16wuNzV5Idl21883KFYpoUqiL/AKRr/G/CZY9/0nZiVV6tzb9vwU7PJvM+gEv9n4oxMCvHYAkDb+5PjN1VNVOxTUib8eKgbhz1udrzVwXGqya7NWWUqKageuierP8A+yxbmLjjKCWhmSmvGrAbezrqZ3WpqYszVISw0x4jZHpOHiVntLtFLbFXu0+5kC6VQOiqfU+Zh1zua7b8f7+Ly0tlVUYyk/SVBebn/dK+Q9t+c6ciTK81vWMREiE0ZGVXjui2bHPfUAkAAeM3yln122MgpUsSCreQCnW+vrDWZLfLbXlB8juO6sDa3s60B76Mi/NqotNdnLonLYHT4/xNWPTrNZ0GQqcfu7xjpm8B89Jh2hRdbaxqrZl4fd5dRvWv31/qGpM94sYmamUzqqMvH+R6/qL8paj1ptYqQAQnTr6GV+z6rUyWZ0YL3etsCOu/eZ34wc3u9IZmtQqSNnX27/7g5n3LdVos3pLF1/NdSo3atCsVCO2n4bGtH3m7Er4PeRSakZhxXoPL2nMyMTJsv5109DbyJPT19YM5zb5dii1b6xYoIB9ZsAA8BK2ArpjcXUqQx6Ea1LUMX8kREMsYiIUiIgIiICIkwERJgIiJUJMiTIMIiIUiIgIiIExEQEmIlCIkyIRESj//2Q==";
 
-  initCar();
   driveCar(false);
   renderHome();
   showView("preface");
