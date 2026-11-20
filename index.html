@@ -152,6 +152,7 @@
   /* ---------- preface ---------- */
   #view-preface{ max-width:none; padding:0; min-height:100vh; display:flex; flex-direction:column; }
   .pf-grid{ flex:1; display:block; }
+  .pf-banner{ display:none; }
   .pf-visual{ position:relative; background:var(--cream); }
   .pf-visual .scene{ display:block; width:100%; aspect-ratio:4/3; height:auto; }
   .pf-visual .scene-tall{ display:none; }
@@ -320,11 +321,12 @@
     .fuel-panel-label{ flex:none; }
     .cat-title{ font-size:20px; }
 
-    .pf-grid{ display:grid; grid-template-columns:minmax(0,1.08fr) minmax(0,1fr); min-height:calc(100vh - 18px); }
-    .pf-visual{ position:sticky; top:0; height:100vh; align-self:start; }
-    .pf-visual .scene{ display:none; }
-    .pf-visual .scene-tall{ display:block; height:100%; aspect-ratio:auto; }
-    .pf-body{ margin:0; border-radius:0; padding:64px 56px; display:flex; align-items:center; }
+    .pf-banner{ display:block; width:100%; box-sizing:border-box; max-width:1080px; margin:44px auto 14px; padding:0 32px; }
+    .pf-banner-in{ border:3px solid var(--maroon); border-radius:30px; overflow:hidden; box-shadow:0 8px 0 var(--maroon); background:var(--maroon); }
+    .pf-banner .scene{ display:block; width:100%; height:auto; aspect-ratio:1200/380; }
+    .pf-grid{ display:block; min-height:0; }
+    .pf-visual{ display:none; }
+    .pf-body{ margin:0 auto; border-radius:0; padding:44px 32px 56px; max-width:760px; }
     .pf-title{ font-size:34px; }
 
     .item-grid{ grid-template-columns:minmax(0,1.4fr) minmax(0,1fr); gap:32px; }
@@ -386,6 +388,20 @@
 
   <!-- PREFACE / 前言 -->
   <div class="view" id="view-preface">
+    <div class="pf-banner"><div class="pf-banner-in"><svg class="scene" viewBox="0 0 1200 380" preserveAspectRatio="xMidYMid slice" role="img" aria-label="愛情加油中 加油站場景">
+ <rect width="1200" height="380" fill="#FDECCB"/>
+ <circle cx="1010" cy="110" r="64" fill="#F7DDC0"/>
+ <path d="M900 300 L934.2 190 L1055.8 190 L1090 300Z" fill="#EBAF7E"/><path d="M60 300 L90.6 210 L199.4 210 L230 300Z" fill="#E7A27C"/><path d="M250 300 L271.6 240 L348.4 240 L370 300Z" fill="#EBAF7E"/>
+ <rect y="326" width="1200" height="54" fill="url(#chk)"/>
+ <rect y="284" width="1200" height="44" fill="#831F20"/>
+ <line x1="0" y1="306" x2="1200" y2="306" stroke="#FDECCB" stroke-width="5" stroke-dasharray="44 30"/>
+ <rect x="590" y="236" width="26" height="50" fill="#F0A12A" stroke="#831F20" stroke-width="3"/>
+ <use href="#sign" transform="translate(417,20) scale(.86)"/>
+ <use href="#star" transform="translate(436,24) scale(.9)"/>
+ <g transform="rotate(-6 100 60)"><use href="#fuelTag" transform="translate(40,30) scale(.8)"/></g>
+ <use href="#pump" transform="translate(150,96) scale(.95)"/>
+ <use href="#car" transform="translate(850,202)"/>
+</svg></div></div>
     <div class="pf-grid">
       <div class="pf-visual"><svg class="scene scene-tall" viewBox="0 0 600 760" preserveAspectRatio="xMidYMid slice" role="img" aria-label="愛情加油中 加油站場景">
  <rect width="600" height="760" fill="#FDECCB"/>
